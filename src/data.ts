@@ -13,6 +13,9 @@ export const wedding = {
     { icon: "💃", event: "Dance Party",    time: "10:30 PM" },
   ],
   mapUrl: "https://maps.google.com/?q=Alyasa+Village+Lebanon",
+  giftRegistry: {
+    id: "*******-03",
+  },
   locations: [
     {
       id: "bride",
@@ -44,6 +47,18 @@ export const wedding = {
     },
   ],
 };
+
+export type GuestEntry = {
+  slug: string;      // URL segment, e.g. "john-doe"  → /john-doe
+  name: string;      // pre-filled in the RSVP form
+  maxGuests: number; // max additional guests this person may bring
+};
+
+export const guests: GuestEntry[] = [
+  { slug: "georges",   name: "Georges",   maxGuests: 2 },
+  { slug: "christine", name: "Christine", maxGuests: 2 },
+  { slug: "rouba",     name: "Rouba",     maxGuests: 8 },
+];
 
 export type RSVPRow = {
   id: string;

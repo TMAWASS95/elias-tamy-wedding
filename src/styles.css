@@ -21,15 +21,23 @@ body {
   z-index: 100;
 }
 
-/* Background photo */
-.cover-bg {
-  position: absolute;
+/* Global background — image set per-phase via inline style in App.tsx */
+.app-global-bg {
+  position: fixed;
   inset: 0;
   background-color: #0d0605;
-  background-image: url('/couple.png');
   background-size: contain;
   background-position: center center;
   background-repeat: no-repeat;
+  z-index: 0;
+  transition: background-image 0.4s ease;
+}
+
+/* Per-screen bg div — keeps dark fallback color, image now from global layer */
+.cover-bg {
+  position: absolute;
+  inset: 0;
+  background-color: transparent;
   z-index: 0;
 }
 
@@ -133,35 +141,30 @@ body {
   color: rgba(255, 255, 255, 0.65);
 }
 
-/* Music toggle — bottom-left */
+/* Music toggle — bottom-left of the image (image is 605×882, contained by height on desktop) */
 .music-btn {
-  position: absolute;
-  bottom: 28px;
-  left: 28px;
-  z-index: 3;
+  position: fixed;
+  /* On landscape desktop the image is height-constrained; left edge = 50vw - 50vh*(605/882) */
+  left: max(28px, calc(50vw - 50vh * 605 / 882 + 28px));
+  /* On portrait mobile the image is width-constrained; bottom bar = (50vh - 50vw*882/605) */
+  bottom: max(28px, calc(50vh - 50vw * 882 / 605 + 28px));
+  z-index: 200;
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
-  font-size: 22px;
-  color: #d4a44c;
   display: flex;
   align-items: center;
-  gap: 5px;
-  line-height: 1;
+  opacity: 0.9;
+  transition: opacity 0.2s;
+  outline: none;
+  box-shadow: none;
 }
 
-.music-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #d4a44c;
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.music-dot.on {
+.music-btn:hover,
+.music-btn:focus {
   opacity: 1;
+  outline: none;
 }
 
 /* ─── Invitation Screen ─────────────────────────── */
@@ -290,8 +293,8 @@ body {
   color: rgba(255,255,255,0.75);
 }
 
-/* Swipe Up button */
-.swipe-up-btn {
+/* Scroll indicator */
+.scroll-indicator {
   position: absolute;
   bottom: 28px;
   left: 50%;
@@ -299,27 +302,37 @@ body {
   z-index: 3;
   background: none;
   border: none;
-  padding: 0;
+  padding: 8px;
   cursor: pointer;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 4px;
-  color: #fff;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 12px;
-  letter-spacing: 0.15em;
+  justify-content: center;
 }
 
-.chevron-up {
-  width: 36px;
-  height: 22px;
-  animation: bob 1.6s ease-in-out infinite;
+.scroll-mouse {
+  width: 26px;
+  height: 42px;
+  border: 2px solid rgba(255, 255, 255, 0.75);
+  border-radius: 13px;
+  display: flex;
+  justify-content: center;
+  padding-top: 7px;
+  box-sizing: border-box;
 }
 
-@keyframes bob {
-  0%, 100% { transform: translateY(0);  }
-  50%       { transform: translateY(-5px); }
+.scroll-dot {
+  width: 4px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 2px;
+  animation: scrollDot 1.8s ease-in-out infinite;
+}
+
+@keyframes scrollDot {
+  0%   { opacity: 1; transform: translateY(0); }
+  70%  { opacity: 0; transform: translateY(10px); }
+  71%  { opacity: 0; transform: translateY(0); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 /* ─── Invitation Screen 2 ───────────────────────── */
@@ -542,6 +555,388 @@ body {
   background: rgba(255,255,255,0.22);
 }
 
+/* ─── Timeline Screen ──────────────────────────── */
+.tl-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 340px;
+  padding: 0 20px;
+}
+
+.tl-timeline {
+  position: relative;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.tl-vline {
+  position: absolute;
+  left: 56px;
+  top: 0;
+  bottom: 0;
+  width: 1.5px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 29px,
+    rgba(255,255,255,0.5) 29px,
+    rgba(255,255,255,0.5) calc(100% - 29px),
+    transparent calc(100% - 29px)
+  );
+  z-index: 0;
+}
+
+.tl-row {
+  display: flex;
+  align-items: center;
+  height: 58px;
+  position: relative;
+}
+
+.tl-icon-col {
+  width: 46px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 2px;
+  flex-shrink: 0;
+}
+
+.tl-icon-svg {
+  width: 30px;
+  height: 34px;
+}
+
+.tl-dot-col {
+  width: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.tl-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.tl-text-col {
+  flex: 1;
+  padding-left: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tl-event-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-style: italic;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.tl-event-time {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  color: rgba(255,255,255,0.78);
+  letter-spacing: 0.04em;
+}
+
+/* ─── Gift Registry Screen ──────────────────────── */
+.gr-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 320px;
+  padding: 0 28px;
+  text-align: center;
+  gap: 18px;
+  color: #fff;
+}
+
+.gr-message {
+  margin: 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 19px;
+  font-style: italic;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.96);
+}
+
+.gr-sub {
+  margin: 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-style: italic;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.88);
+}
+
+.gr-id-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.gr-id-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.gr-id-value {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.88);
+}
+
+.gr-logo-box {
+  margin: 10px 0 4px;
+  border-radius: 10px;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.gr-thankyou {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  color: rgba(255,255,255,0.78);
+  text-transform: uppercase;
+}
+
+/* ─── RSVP Screen ───────────────────────────────── */
+.rsvp-screen-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 360px;
+  padding: 0 32px;
+}
+
+.rsvp-screen-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  gap: 0;
+}
+
+.rsvp-field {
+  position: relative;
+  width: 100%;
+  margin-bottom: 22px;
+}
+
+.rsvp-screen-form input.rsvp-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.55);
+  padding: 8px 0;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  outline: none;
+}
+
+.rsvp-screen-form input.rsvp-input::placeholder {
+  color: rgba(255,255,255,0.85);
+}
+
+.rsvp-select-label {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.82);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.rsvp-custom-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.55);
+  padding: 8px 0;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 15px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.rsvp-custom-chevron {
+  width: 16px;
+  height: 10px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.rsvp-custom-chevron.flipped {
+  transform: rotate(180deg);
+}
+
+.rsvp-custom-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  background: rgba(20, 10, 5, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  overflow-y: auto;
+  max-height: 220px;
+  margin-top: 4px;
+  animation: dropdownIn 0.18s ease;
+  scrollbar-width: none;
+}
+
+.rsvp-custom-panel::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes dropdownIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.rsvp-custom-option {
+  width: 100%;
+  display: block;
+  background: transparent;
+  border: none;
+  padding: 13px 18px;
+  color: rgba(255,255,255,0.85);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.rsvp-custom-option:last-child {
+  border-bottom: none;
+}
+
+.rsvp-custom-option:hover {
+  background: rgba(212,164,76,0.15);
+  color: #fff;
+}
+
+.rsvp-custom-option.selected {
+  color: #d4a44c;
+  font-weight: 600;
+}
+
+.rsvp-submit-btn {
+  width: 100%;
+  padding: 15px;
+  margin-top: 28px;
+  background: linear-gradient(135deg, #c9a86c, #b8935a);
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.rsvp-submit-btn:hover {
+  background: linear-gradient(135deg, #d4b47a, #c29d65);
+}
+
+.rsvp-thanks {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-style: italic;
+  color: #fff;
+  text-align: center;
+  line-height: 1.7;
+  margin: 0;
+  padding: 0 8px;
+}
+
+/* ─── Countdown Screen ──────────────────────────── */
+.cd-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(100vw, calc(100vh * 605 / 882));
+  gap: 36px;
+}
+
+.cd-units {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+  padding: 0 4px;
+}
+
+.cd-unit {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.cd-number {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 58px;
+  font-weight: 300;
+  color: #fff;
+  line-height: 1;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+
+.cd-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.78);
+  text-transform: uppercase;
+}
+
+@media (max-width: 380px) {
+  .cd-number { font-size: 46px; }
+  .cd-label  { font-size: 10px; }
+}
+
 /* ─── Main content sections ─────────────────────── */
 .section {
   padding: 80px 20px;
@@ -603,8 +998,8 @@ button {
   }
 
   .music-btn {
-    bottom: 18px;
-    left: 18px;
+    left: max(18px, calc(50vw - 50vh * 605 / 882 + 18px));
+    bottom: max(18px, calc(50vh - 50vw * 882 / 605 + 18px));
     font-size: 18px;
   }
 
@@ -670,7 +1065,7 @@ button {
     font-size: 22px;
   }
 
-  .swipe-up-btn {
+  .scroll-indicator {
     bottom: 20px;
   }
 

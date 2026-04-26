@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { wedding } from "../data";
 
@@ -7,8 +6,6 @@ interface CoverProps {
 }
 
 export default function Cover({ onStart }: CoverProps) {
-  const [musicOn, setMusicOn] = useState(false);
-
   const dateLabel = new Date(wedding.date).toLocaleDateString("en-US", {
     weekday: "long",
     month: "long",
@@ -19,7 +16,6 @@ export default function Cover({ onStart }: CoverProps) {
   return (
     <motion.div
       className="cover-screen"
-      exit={{ opacity: 0 }}
       transition={{ duration: 0.6 }}
     >
       <div className="cover-bg" />
@@ -60,16 +56,7 @@ export default function Cover({ onStart }: CoverProps) {
         <span className="cover-date-label">{dateLabel}</span>
       </motion.div>
 
-      <motion.button
-        className="music-btn"
-        onClick={() => setMusicOn((m) => !m)}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        aria-label="Toggle music"
-      >
-        ♪<span className={`music-dot ${musicOn ? "on" : ""}`} />
-      </motion.button>
+
     </motion.div>
   );
 }

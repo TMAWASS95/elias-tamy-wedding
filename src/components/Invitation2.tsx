@@ -1,4 +1,5 @@
 import { wedding } from "../data";
+import ScrollIndicator from "./ScrollIndicator";
 
 interface Invitation2Props {
   onContinue: () => void;
@@ -13,14 +14,6 @@ function CrossIcon() {
   );
 }
 
-function ChevronUp() {
-  return (
-    <svg className="chevron-up" viewBox="0 0 40 24" fill="none">
-      <polyline points="2,20 20,4 38,20" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-      <polyline points="2,14 20,4 38,14" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
-    </svg>
-  );
-}
 
 export default function Invitation2({ onContinue }: Invitation2Props) {
   return (
@@ -61,10 +54,7 @@ export default function Invitation2({ onContinue }: Invitation2Props) {
         </div>
       </div>
 
-      <button className="swipe-up-btn" onClick={onContinue}>
-        <ChevronUp />
-        <span>Swipe Up</span>
-      </button>
+      <ScrollIndicator onClick={onContinue} />
     </div>
   );
 }

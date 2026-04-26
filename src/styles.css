@@ -1,0 +1,698 @@
+/* ─── Base ─────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Playfair Display', serif;
+  background: #f8f5f0;
+  color: #2c2c2c;
+}
+
+/* ─── Cover / Splash Screen ────────────────────── */
+.cover-screen {
+  position: fixed;
+  inset: 0;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 100;
+}
+
+/* Background photo */
+.cover-bg {
+  position: absolute;
+  inset: 0;
+  background-color: #0d0605;
+  background-image: url('/couple.png');
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+
+/* Dark cinematic overlay */
+.cover-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.42);
+  z-index: 1;
+}
+
+/* Centre content: button + tap text */
+.cover-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+/* Circular Start button */
+.start-btn {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  color: #fff;
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  overflow: hidden;
+}
+
+.start-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Pulsing ring behind the button */
+.start-pulse {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  animation: pulse-ring 2.4s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse-ring {
+  0%   { transform: scale(1);    opacity: 0.7; }
+  60%  { transform: scale(1.18); opacity: 0.2; }
+  100% { transform: scale(1.18); opacity: 0;   }
+}
+
+/* "Tap to start" label */
+.tap-text {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.75);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Couple names + date pinned to bottom */
+.cover-names-bottom {
+  position: absolute;
+  bottom: 48px;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.cover-couple-name {
+  font-family: 'Great Vibes', cursive;
+  font-size: 42px;
+  color: #fff;
+  line-height: 1;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+}
+
+.cover-date-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* Music toggle — bottom-left */
+.music-btn {
+  position: absolute;
+  bottom: 28px;
+  left: 28px;
+  z-index: 3;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 22px;
+  color: #d4a44c;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1;
+}
+
+.music-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #d4a44c;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.music-dot.on {
+  opacity: 1;
+}
+
+/* ─── Invitation Screen ─────────────────────────── */
+.inv-overlay {
+  background: rgba(0, 0, 0, 0.38);
+}
+
+.inv-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 0 24px;
+  text-align: center;
+  color: #fff;
+}
+
+/* WE ♥ DO */
+.we-do {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.we-do-word {
+  font-family: 'Dancing Script', cursive;
+  font-size: 38px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.heart-svg {
+  width: 54px;
+  height: 50px;
+  flex-shrink: 0;
+}
+
+/* Together line */
+.inv-together {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: rgba(255,255,255,0.85);
+}
+
+/* Names row */
+.inv-names-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 4px 0;
+}
+
+.inv-partner {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.inv-and {
+  font-family: 'Dancing Script', cursive;
+  font-size: 22px;
+  color: rgba(255,255,255,0.85);
+}
+
+/* Invite text */
+.inv-invite {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.8);
+}
+
+/* Date block */
+.inv-date-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-top: 10px;
+}
+
+.inv-month {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-style: italic;
+  color: rgba(255,255,255,0.9);
+}
+
+.inv-date-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.inv-weekday,
+.inv-time {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.8);
+}
+
+.inv-day-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 72px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1;
+}
+
+.inv-year {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.75);
+}
+
+/* Swipe Up button */
+.swipe-up-btn {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+}
+
+.chevron-up {
+  width: 36px;
+  height: 22px;
+  animation: bob 1.6s ease-in-out infinite;
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0);  }
+  50%       { transform: translateY(-5px); }
+}
+
+/* ─── Invitation Screen 2 ───────────────────────── */
+.inv2-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 0 28px;
+  text-align: center;
+  color: #fff;
+}
+
+.cross-icon {
+  width: 28px;
+  height: 40px;
+}
+
+.inv2-verse {
+  margin: 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  font-style: italic;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.92);
+  white-space: pre-line;
+}
+
+.inv2-verse-ref {
+  font-style: normal;
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+}
+
+/* Family columns */
+.inv2-families {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+  max-width: 280px;
+}
+
+.inv2-family {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.inv2-family-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.inv2-family-label {
+  font-family: 'Dancing Script', cursive;
+  font-size: 20px;
+  color: rgba(255,255,255,0.88);
+}
+
+.inv2-divider {
+  width: 1px;
+  height: 70px;
+  background: rgba(255,255,255,0.5);
+  flex-shrink: 0;
+  margin: 0 16px;
+}
+
+/* Request text */
+.inv2-request {
+  margin: 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  font-style: italic;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.85);
+  white-space: pre-line;
+}
+
+/* Couple names row */
+.inv2-names-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.inv2-partner {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.inv2-and {
+  font-family: 'Dancing Script', cursive;
+  font-size: 20px;
+  color: rgba(255,255,255,0.85);
+}
+
+/* ─── Event / Celebration Screen ───────────────── */
+.evt-overlay {
+  background: rgba(0, 0, 0, 0.52);
+}
+
+.evt-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 360px;
+  padding: 0 28px;
+  gap: 0;
+}
+
+.evt-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+.evt-the {
+  font-family: 'Great Vibes', cursive;
+  font-size: 58px;
+  color: #fff;
+  line-height: 1;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.4);
+}
+
+.evt-celebration {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.88);
+  margin-top: -6px;
+}
+
+.evt-item-wrap {
+  width: 100%;
+}
+
+.evt-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 0;
+  width: 100%;
+}
+
+.evt-row-icon {
+  width: 40px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.evt-icon-svg {
+  width: 34px;
+  height: 50px;
+}
+
+.evt-row-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.evt-row-name {
+  font-family: 'Great Vibes', cursive;
+  font-size: 26px;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.evt-row-sub {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.78);
+}
+
+.evt-directions {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  margin-top: 2px;
+}
+
+.evt-pin-icon {
+  width: 10px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
+.evt-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(255,255,255,0.22);
+}
+
+/* ─── Main content sections ─────────────────────── */
+.section {
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.names {
+  font-family: 'Great Vibes', cursive;
+  font-size: 56px;
+}
+
+.scroll {
+  position: absolute;
+  bottom: 30px;
+  opacity: 0.6;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 300px;
+  margin: auto;
+}
+
+input, select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  background: white;
+}
+
+button {
+  padding: 10px;
+  border: 1px solid #c5a47e;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* ─── Mobile responsive (portrait phones) ──────── */
+@media (max-width: 480px) {
+  /* Cover screen */
+  .start-btn {
+    width: 90px;
+    height: 90px;
+    font-size: 18px;
+  }
+
+  .cover-couple-name {
+    font-size: 34px;
+  }
+
+  .cover-date-label {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+  }
+
+  .cover-names-bottom {
+    bottom: 60px;
+  }
+
+  .music-btn {
+    bottom: 18px;
+    left: 18px;
+    font-size: 18px;
+  }
+
+  /* Invitation (WE ♥ DO) */
+  .we-do-word {
+    font-size: 32px;
+  }
+
+  .heart-svg {
+    width: 44px;
+    height: 40px;
+  }
+
+  .inv-together {
+    font-size: 9px;
+    letter-spacing: 0.16em;
+  }
+
+  .inv-partner {
+    font-size: 24px;
+  }
+
+  .inv-invite {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+  }
+
+  .inv-day-num {
+    font-size: 58px;
+  }
+
+  .inv-month {
+    font-size: 16px;
+  }
+
+  .inv-year {
+    font-size: 12px;
+  }
+
+  /* Invitation 2 (cross/bible) */
+  .inv2-content {
+    gap: 14px;
+    padding: 0 20px;
+  }
+
+  .inv2-verse {
+    font-size: 14px;
+  }
+
+  .inv2-family-name {
+    font-size: 19px;
+  }
+
+  .inv2-family-label {
+    font-size: 17px;
+  }
+
+  .inv2-request {
+    font-size: 13px;
+  }
+
+  .inv2-partner {
+    font-size: 22px;
+  }
+
+  .swipe-up-btn {
+    bottom: 20px;
+  }
+
+  /* Event screen */
+  .evt-the {
+    font-size: 48px;
+  }
+
+  .evt-celebration {
+    font-size: 15px;
+  }
+
+  .evt-row-name {
+    font-size: 22px;
+  }
+
+  .evt-icon-svg {
+    width: 28px;
+    height: 42px;
+  }
+
+  .evt-row-icon {
+    width: 34px;
+  }
+}

@@ -9,29 +9,42 @@ body {
 }
 
 /* ─── Cover / Splash Screen ────────────────────── */
-.cover-screen {
-  position: fixed;
-  inset: 0;
+/* ─── Snap scroll container ─────────────────────── */
+.snap-container {
   height: 100dvh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.snap-container::-webkit-scrollbar {
+  display: none;
+}
+
+.snap-section {
+  height: 100dvh;
+  scroll-snap-align: start;
+  position: relative;
+  background-color: #0d0605;
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+.cover-screen {
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  padding-bottom: clamp(28px, 6vh, 64px);
   overflow: hidden;
-  z-index: 100;
 }
 
-/* Global background — image set per-phase via inline style in App.tsx */
-.app-global-bg {
-  position: fixed;
-  inset: 0;
-  background-color: #0d0605;
-  background-size: contain;
-  background-position: center center;
-  background-repeat: no-repeat;
-  z-index: 0;
-  transition: background-image 0.4s ease;
-}
 
 /* Per-screen bg div — keeps dark fallback color, image now from global layer */
 .cover-bg {
@@ -41,75 +54,65 @@ body {
   z-index: 0;
 }
 
-/* Dark cinematic overlay */
+/* Gradient overlay — faces visible at top, dark at bottom for text */
 .cover-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.42);
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.05) 0%,
+    rgba(0, 0, 0, 0.08) 38%,
+    rgba(0, 0, 0, 0.55) 58%,
+    rgba(0, 0, 0, 0.72) 100%
+  );
   z-index: 1;
 }
 
-/* Centre content: button + tap text */
-.cover-content {
-  position: relative;
+/* ─── Cover — video background + initials ───────── */
+.cover-video-wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.cover-yt-iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* Scale iframe to always cover the viewport regardless of orientation */
+  width: max(100%, 177.78vh);
+  height: max(100%, 56.25vw);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  border: none;
+}
+
+.cover-initials {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 2;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 18px;
+  gap: clamp(16px, 5vw, 32px);
 }
 
-/* Circular Start button */
-.start-btn {
-  position: relative;
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, 0.85);
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  color: #fff;
-  font-family: 'Playfair Display', serif;
-  font-size: 20px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s;
-  overflow: hidden;
+.cover-init-letter {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(90px, 24vw, 160px);
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1;
+  letter-spacing: 0.02em;
 }
 
-.start-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-/* Pulsing ring behind the button */
-.start-pulse {
-  position: absolute;
-  inset: -6px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  animation: pulse-ring 2.4s ease-out infinite;
-  pointer-events: none;
-}
-
-@keyframes pulse-ring {
-  0%   { transform: scale(1);    opacity: 0.7; }
-  60%  { transform: scale(1.18); opacity: 0.2; }
-  100% { transform: scale(1.18); opacity: 0;   }
-}
-
-/* "Tap to start" label */
-.tap-text {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.75);
-  font-family: 'Montserrat', sans-serif;
-  font-size: 13px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+.cover-init-heart {
+  font-size: clamp(26px, 6vw, 44px);
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1;
+  margin-top: -8px;
 }
 
 /* Couple names + date pinned to bottom */
@@ -141,13 +144,11 @@ body {
   color: rgba(255, 255, 255, 0.65);
 }
 
-/* Music toggle — bottom-left of the image (image is 605×882, contained by height on desktop) */
+/* Music toggle */
 .music-btn {
   position: fixed;
-  /* On landscape desktop the image is height-constrained; left edge = 50vw - 50vh*(605/882) */
-  left: max(28px, calc(50vw - 50vh * 605 / 882 + 28px));
-  /* On portrait mobile the image is width-constrained; bottom bar = (50vh - 50vw*882/605) */
-  bottom: max(28px, calc(50vh - 50vw * 882 / 605 + 28px));
+  left: 24px;
+  bottom: 24px;
   z-index: 200;
   background: none;
   border: none;
@@ -167,9 +168,144 @@ body {
   outline: none;
 }
 
+/* ─── Lumière shared design system ──────────────── */
+.lum-overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.05) 0%,
+    rgba(0, 0, 0, 0.08) 38%,
+    rgba(0, 0, 0, 0.60) 58%,
+    rgba(0, 0, 0, 0.76) 100%
+  );
+  z-index: 1;
+}
+
+.lum-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 0 32px;
+  width: 100%;
+  max-width: 480px;
+}
+
+.lum-content--center {
+  justify-content: center;
+}
+
+.lum-line {
+  width: 44px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.45);
+  flex-shrink: 0;
+}
+
+.lum-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(17px, 4.5vw, 22px);
+  color: #fff;
+  text-align: center;
+  line-height: 1.65;
+  margin: 0;
+  white-space: pre-line;
+}
+
+.lum-quote-ref {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+}
+
+.lum-body {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(14px, 3.8vw, 18px);
+  color: rgba(255, 255, 255, 0.88);
+  text-align: center;
+  margin: 0;
+  line-height: 1.55;
+  white-space: pre-line;
+}
+
+.lum-body--muted {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: clamp(12px, 3vw, 15px);
+}
+
+.lum-families {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 3vw, 20px);
+  flex-wrap: wrap;
+}
+
+.lum-family-name {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(30px, 8vw, 48px);
+  color: #fff;
+  line-height: 1.1;
+}
+
+.lum-ampersand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(16px, 4vw, 22px);
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+}
+
+.lum-couple-name {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(56px, 15vw, 88px);
+  color: #fff;
+  line-height: 1.1;
+  text-align: center;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+  margin: 0;
+}
+
+.lum-date {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: clamp(14px, 3.8vw, 18px);
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  margin: 0;
+}
+
+.lum-section-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.lum-section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(28px, 7vw, 42px);
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+
 /* ─── Invitation Screen ─────────────────────────── */
 .inv-overlay {
-  background: rgba(0, 0, 0, 0.38);
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.05) 0%,
+    rgba(0, 0, 0, 0.08) 38%,
+    rgba(0, 0, 0, 0.52) 58%,
+    rgba(0, 0, 0, 0.68) 100%
+  );
 }
 
 .inv-content {
@@ -293,46 +429,36 @@ body {
   color: rgba(255,255,255,0.75);
 }
 
-/* Scroll indicator */
+/* Scroll indicator — hidden; navigation is via native scroll */
 .scroll-indicator {
-  position: absolute;
-  bottom: 28px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 3;
-  background: none;
-  border: none;
-  padding: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: none;
 }
 
-.scroll-mouse {
-  width: 26px;
-  height: 42px;
-  border: 2px solid rgba(255, 255, 255, 0.75);
-  border-radius: 13px;
+
+.scroll-track {
+  width: 2px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 1px;
   display: flex;
   justify-content: center;
-  padding-top: 7px;
-  box-sizing: border-box;
+  align-items: flex-start;
+  overflow: hidden;
 }
 
-.scroll-dot {
-  width: 4px;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 2px;
-  animation: scrollDot 1.8s ease-in-out infinite;
+.scroll-thumb {
+  width: 2px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 1px;
+  animation: scrollThumb 1.8s ease-in-out infinite;
 }
 
-@keyframes scrollDot {
-  0%   { opacity: 1; transform: translateY(0); }
-  70%  { opacity: 0; transform: translateY(10px); }
-  71%  { opacity: 0; transform: translateY(0); }
-  100% { opacity: 1; transform: translateY(0); }
+@keyframes scrollThumb {
+  0%   { transform: translateY(0);   opacity: 1; }
+  70%  { transform: translateY(30px); opacity: 0; }
+  71%  { transform: translateY(0);   opacity: 0; }
+  100% { transform: translateY(0);   opacity: 1; }
 }
 
 /* ─── Invitation Screen 2 ───────────────────────── */
@@ -444,7 +570,13 @@ body {
 
 /* ─── Event / Celebration Screen ───────────────── */
 .evt-overlay {
-  background: rgba(0, 0, 0, 0.52);
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.05) 0%,
+    rgba(0, 0, 0, 0.08) 38%,
+    rgba(0, 0, 0, 0.58) 58%,
+    rgba(0, 0, 0, 0.74) 100%
+  );
 }
 
 .evt-content {
@@ -452,9 +584,9 @@ body {
   z-index: 2;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   width: 100%;
-  max-width: 360px;
+  max-width: 400px;
   padding: 0 28px;
   gap: 0;
 }
@@ -611,6 +743,18 @@ body {
   height: 34px;
 }
 
+/* Timeline emoji icon (matches data.ts timeline icons) */
+.tl-emoji {
+  width: 30px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 10px rgba(0,0,0,0.35));
+}
+
 .tl-dot-col {
   width: 22px;
   display: flex;
@@ -690,22 +834,27 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  margin-top: 4px;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 18px 32px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
 }
 
 .gr-id-label {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 19px;
-  font-weight: 700;
-  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
 }
 
 .gr-id-value {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 15px;
-  letter-spacing: 0.1em;
-  color: rgba(255,255,255,0.88);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #fff;
 }
 
 .gr-logo-box {
@@ -729,9 +878,9 @@ body {
   z-index: 2;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   width: 100%;
-  max-width: 360px;
+  max-width: 380px;
   padding: 0 32px;
 }
 
@@ -889,22 +1038,19 @@ body {
   padding: 0 8px;
 }
 
-/* ─── Countdown Screen ──────────────────────────── */
-.cd-content {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: min(100vw, calc(100vh * 605 / 882));
-  gap: 36px;
+.rsvp-error {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  color: #ff8a80;
+  text-align: center;
+  margin: 0;
 }
 
+/* ─── Countdown Screen ──────────────────────────── */
 .cd-units {
   display: flex;
   width: 100%;
   justify-content: space-around;
-  padding: 0 4px;
 }
 
 .cd-unit {
@@ -917,7 +1063,7 @@ body {
 
 .cd-number {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 58px;
+  font-size: clamp(44px, 11vw, 70px);
   font-weight: 300;
   color: #fff;
   line-height: 1;
@@ -926,10 +1072,76 @@ body {
 
 .cd-label {
   font-family: 'Montserrat', sans-serif;
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  color: rgba(255,255,255,0.78);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: rgba(255,255,255,0.7);
   text-transform: uppercase;
+}
+
+/* ─── Countdown — torn paper (unused, kept for reference) ─── */
+.cd-paper-wrap {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.cd-paper-tear {
+  width: 100%;
+  height: 50px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.cd-paper-band {
+  background: #fff;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 32px 20px;
+  gap: 28px;
+}
+
+.cd-paper-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: clamp(26px, 6.5vw, 38px);
+  color: #1a1a1a;
+  text-align: center;
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+.cd-paper-units {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.cd-paper-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.cd-paper-number {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(48px, 12vw, 78px);
+  font-weight: 600;
+  color: #1a1a1a;
+  line-height: 1;
+}
+
+.cd-paper-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(9px, 2vw, 11px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.45);
 }
 
 @media (max-width: 380px) {
@@ -1065,10 +1277,6 @@ button {
     font-size: 22px;
   }
 
-  .scroll-indicator {
-    bottom: 20px;
-  }
-
   /* Event screen */
   .evt-the {
     font-size: 48px;
@@ -1090,4 +1298,61 @@ button {
   .evt-row-icon {
     width: 34px;
   }
+}
+
+/* ─── Extra mobile polish (small phones + landscape) ─────────── */
+
+/* Safe-area support (iOS notch/home indicator) */
+body {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+.music-btn {
+  left: calc(18px + env(safe-area-inset-left));
+  bottom: calc(18px + env(safe-area-inset-bottom));
+  touch-action: manipulation;
+}
+
+/* Improve snap scrolling feel on mobile */
+.snap-container {
+  scroll-behavior: smooth;
+  scroll-padding-top: env(safe-area-inset-top);
+  touch-action: pan-y;
+}
+
+/* Very small devices (e.g., 320px wide) */
+@media (max-width: 360px) {
+  .lum-content { padding: 0 18px; gap: 14px; }
+  .inv-content { padding: 0 18px; }
+  .rsvp-screen-content { padding: 0 18px; }
+  .cover-couple-name { font-size: 30px; }
+  .inv-day-num { font-size: 54px; }
+}
+
+/* Short screens / landscape phones: reduce vertical spacing */
+@media (max-height: 700px) {
+  .cover-names-bottom { bottom: 32px; }
+  .lum-content { gap: 14px; }
+  .inv2-content { gap: 12px; }
+  .evt-content { padding: 0 20px; }
+  .rsvp-field { margin-bottom: 16px; }
+  .rsvp-submit-btn { margin-top: 18px; }
+}
+
+/* Landscape phones: keep content readable and avoid cropping */
+@media (orientation: landscape) and (max-height: 520px) {
+  .snap-section { background-position: top center; }
+  .lum-content, .inv-content, .inv2-content, .evt-content, .tl-content, .gr-content, .rsvp-screen-content {
+    max-width: 520px;
+  }
+  .cover-init-letter { font-size: clamp(70px, 16vw, 120px); }
+  .cover-names-bottom { bottom: 22px; }
+}
+
+/* Larger tap targets for form controls */
+.rsvp-custom-trigger,
+.rsvp-submit-btn,
+.rsvp-custom-option {
+  min-height: 44px;
 }

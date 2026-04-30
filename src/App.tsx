@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { Routes, Route, useParams } from "react-router-dom";
 import Cover from "./components/Cover";
 import Invitation from "./components/Invitation";
@@ -8,6 +8,7 @@ import TimelineScreen from "./components/TimelineScreen";
 import GiftRegistryScreen from "./components/GiftRegistryScreen";
 import CountdownScreen from "./components/CountdownScreen";
 import RSVPScreen from "./components/RSVPScreen";
+import AdminDashboard from "./components/AdminDashboard";
 import { guests, type GuestEntry } from "./data";
 
 declare global {
@@ -17,84 +18,30 @@ declare global {
   }
 }
 
-const YT_VIDEO_ID  = "zcdMC_VScUE";
-const BG_FADE_MS   = 600;
-const CONTENT_HALF = 220;
+const YT_VIDEO_ID = "zcdMC_VScUE";
 
-type Phase = "cover" | "invitation2" | "invitation" | "eventscreen" | "timeline" | "giftregistry" | "countdown" | "rsvp" | "main";
-
-const PHASES: Phase[] = [
-  "cover", "invitation2", "invitation", "eventscreen",
-  "timeline", "giftregistry", "countdown", "rsvp",
+// All sections use cover-sized background photos.
+const SECTION_IMAGES: (string | null)[] = [
+  import.meta.env.BASE_URL + "img2.jpg",
+  import.meta.env.BASE_URL + "img2.jpg",
+  import.meta.env.BASE_URL + "DAS 2148.jpg",
+  import.meta.env.BASE_URL + "DAS 2168.jpg",
+  import.meta.env.BASE_URL + "DAS 2174.jpg",
+  import.meta.env.BASE_URL + "DAS 2180.jpg",
+  import.meta.env.BASE_URL + "DAS couple.jpg",
+  import.meta.env.BASE_URL + "img2.jpg",
 ];
 
-const PHASE_IMAGES: Record<Phase, string> = {
-  cover:        "/couple.png",
-  invitation2:  "/img2.jpg",
-  invitation:   "/DAS 2148.jpg",
-  eventscreen:  "/DAS 2168.jpg",
-  timeline:     "/DAS 2174.jpg",
-  giftregistry: "/DAS 2180.jpg",
-  countdown:    "/DAS 2190.jpg",
-  rsvp:         "/img2.jpg",
-  main:         "/couple.png",
-};
+function Wedding({ guest, slug }: { guest: GuestEntry | null; slug?: string }) {
+  const [musicOn, setMusicOn] = useState(false);
+  const playerRef    = useRef<any>(null);
+  const sectionRefs  = useRef<(HTMLDivElement | null)[]>([]);
 
-function Wedding({ guest }: { guest: GuestEntry | null }) {
-  const [phase, setPhase]                   = useState<Phase>("cover");
-  const [contentOpacity, setContentOpacity] = useState(1);
-  const [musicOn, setMusicOn]               = useState(false);
-
-  // Two permanent bg layers — we never add/remove them, just update styles directly
-  const layerARef  = useRef<HTMLDivElement>(null);
-  const layerBRef  = useRef<HTMLDivElement>(null);
-  const topLayer   = useRef<"A" | "B">("A"); // which layer is currently visible
-
-  const playerRef   = useRef<any>(null);
-  const phaseRef    = useRef<Phase>("cover");
-  const touchStartY = useRef(0);
-  const swiped      = useRef(false);
-  const transitioning = useRef(false);
-
-  const crossfadeBg = (newImage: string) => {
-    const elA = layerARef.current!;
-    const elB = layerBRef.current!;
-    const incoming = topLayer.current === "A" ? elB : elA;
-    const outgoing  = topLayer.current === "A" ? elA : elB;
-
-    // Prepare incoming layer: set image, disable transition, force opacity 0
-    incoming.style.transition = "none";
-    incoming.style.backgroundImage = `url('${newImage}')`;
-    incoming.style.opacity = "0";
-    incoming.offsetHeight; // force reflow so transition kicks in next
-
-    // Crossfade
-    incoming.style.transition = `opacity ${BG_FADE_MS}ms ease`;
-    outgoing.style.transition  = `opacity ${BG_FADE_MS}ms ease`;
-    incoming.style.opacity = "1";
-    outgoing.style.opacity  = "0";
-
-    topLayer.current = topLayer.current === "A" ? "B" : "A";
+  const scrollTo = (i: number) => {
+    sectionRefs.current[i]?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const setPhaseSync = (next: Phase) => {
-    if (transitioning.current) return;
-    transitioning.current = true;
-    phaseRef.current = next;
-
-    crossfadeBg(PHASE_IMAGES[next]);
-    setContentOpacity(0);
-
-    setTimeout(() => {
-      setPhase(next);
-      setContentOpacity(1);
-    }, CONTENT_HALF);
-
-    setTimeout(() => { transitioning.current = false; }, BG_FADE_MS + 50);
-  };
-
-  // YouTube IFrame API — container lives outside React's DOM tree so the
-  // iframe replacement by the YT API never invalidates React's node references
+  // YouTube IFrame API — container lives outside React's DOM tree
   useEffect(() => {
     const container = document.createElement("div");
     container.style.cssText =
@@ -133,48 +80,24 @@ function Wedding({ guest }: { guest: GuestEntry | null }) {
     setMusicOn(m => !m);
   };
 
-  // Global swipe
-  useEffect(() => {
-    const onTouchStart = (e: TouchEvent) => { touchStartY.current = e.touches[0].clientY; swiped.current = false; };
-    const onTouchEnd   = (e: TouchEvent) => {
-      if (swiped.current || phaseRef.current === "main") return;
-      const dy  = touchStartY.current - e.changedTouches[0].clientY;
-      const idx = PHASES.indexOf(phaseRef.current);
-      if      (dy >  60) { swiped.current = true; const n = PHASES[idx + 1]; if (n) setPhaseSync(n); }
-      else if (dy < -60) { swiped.current = true; const p = PHASES[idx - 1]; if (p) setPhaseSync(p); }
-    };
-    window.addEventListener("touchstart", onTouchStart, { passive: true });
-    window.addEventListener("touchend",   onTouchEnd,   { passive: true });
-    return () => {
-      window.removeEventListener("touchstart", onTouchStart);
-      window.removeEventListener("touchend",   onTouchEnd);
-    };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const goNext = () => { const n = PHASES[PHASES.indexOf(phaseRef.current) + 1]; if (n) setPhaseSync(n); };
-
-  const screenNode = (() => {
-    switch (phase) {
-      case "cover":        return <Cover              onStart={goNext} />;
-      case "invitation2":  return <Invitation2        onContinue={goNext} />;
-      case "invitation":   return <Invitation         onContinue={goNext} />;
-      case "eventscreen":  return <EventScreen        onContinue={goNext} />;
-      case "timeline":     return <TimelineScreen     onContinue={goNext} />;
-      case "giftregistry": return <GiftRegistryScreen onContinue={goNext} />;
-      case "countdown":    return <CountdownScreen    onContinue={goNext} />;
-      case "rsvp":         return <RSVPScreen onContinue={() => setPhaseSync("main")} guestName={guest?.name} maxGuests={guest?.maxGuests} />;
-      default:             return <main />;
-    }
-  })();
+  const screens = [
+    <Cover              onStart={()      => scrollTo(1)} />,
+    <Invitation2        onContinue={()   => scrollTo(2)} />,
+    <Invitation         onContinue={()   => scrollTo(3)} />,
+    <EventScreen        onContinue={()   => scrollTo(4)} />,
+    <TimelineScreen     onContinue={()   => scrollTo(5)} />,
+    <GiftRegistryScreen onContinue={()   => scrollTo(6)} />,
+    <CountdownScreen    onContinue={()   => scrollTo(7)} />,
+    <RSVPScreen         onContinue={()   => {}}
+                        guestName={guest?.name}
+                        maxGuests={guest?.maxGuests}
+                        slug={slug} />,
+  ];
 
   return (
     <div style={{ height: "100dvh", overflow: "hidden", background: "#0d0605" }}>
 
-      {/* Two permanent bg layers — crossfaded via direct DOM style updates, never added/removed */}
-      <div ref={layerARef} className="app-global-bg" style={{ backgroundImage: `url('${PHASE_IMAGES["cover"]}')`, opacity: 1 }} />
-      <div ref={layerBRef} className="app-global-bg" style={{ backgroundImage: `url('${PHASE_IMAGES["cover"]}')`, opacity: 0 }} />
-
-      {/* Persistent music button */}
+      {/* Persistent music button — fixed to viewport, above all sections */}
       <button className="music-btn" onClick={toggleMusic} aria-label="Toggle music">
         {musicOn ? (
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#d4a44c" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -191,9 +114,18 @@ function Wedding({ guest }: { guest: GuestEntry | null }) {
         )}
       </button>
 
-      {/* Screen content — fades out/in around the phase swap */}
-      <div style={{ position: "absolute", inset: 0, zIndex: 1, opacity: contentOpacity, transition: `opacity ${CONTENT_HALF}ms ease` }}>
-        {screenNode}
+      {/* Single scrollable page — all sections stacked, snapping per viewport height */}
+      <div className="snap-container">
+        {screens.map((screen, i) => (
+          <div
+            key={i}
+            ref={(el) => { sectionRefs.current[i] = el; }}
+            className="snap-section"
+            style={SECTION_IMAGES[i] ? { backgroundImage: `url('${SECTION_IMAGES[i]}')` } : {}}
+          >
+            {screen}
+          </div>
+        ))}
       </div>
 
     </div>
@@ -202,15 +134,17 @@ function Wedding({ guest }: { guest: GuestEntry | null }) {
 
 function GuestRoute() {
   const { slug } = useParams<{ slug: string }>();
-  const guest = guests.find((g) => g.slug === slug) ?? null;
-  return <Wedding guest={guest} />;
+  const guest = guests.find((g) => g.slug === slug);
+  if (!guest) return null;
+  return <Wedding guest={guest} slug={slug} />;
 }
 
 export default function App() {
   return (
     <Routes>
-      <Route path="/"      element={<Wedding guest={null} />} />
-      <Route path="/:slug" element={<GuestRoute />} />
+      <Route path="/"        element={null} />
+      <Route path="/admin"   element={<AdminDashboard />} />
+      <Route path="/:slug"   element={<GuestRoute />} />
     </Routes>
   );
 }

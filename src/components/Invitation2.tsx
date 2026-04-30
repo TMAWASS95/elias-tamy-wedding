@@ -1,60 +1,39 @@
 import { wedding } from "../data";
-import ScrollIndicator from "./ScrollIndicator";
 
 interface Invitation2Props {
   onContinue: () => void;
 }
 
-function CrossIcon() {
-  return (
-    <svg className="cross-icon" viewBox="0 0 40 56" fill="none">
-      <rect x="17" y="0"  width="6" height="56" rx="2" fill="white" />
-      <rect x="0"  y="14" width="40" height="6"  rx="2" fill="white" />
-    </svg>
-  );
-}
-
-
-export default function Invitation2({ onContinue }: Invitation2Props) {
+export default function Invitation2({ onContinue: _onContinue }: Invitation2Props) {
   return (
     <div className="cover-screen">
-      <div className="cover-bg" />
-      <div className="cover-overlay inv-overlay" />
+      <div className="cover-overlay lum-overlay" />
 
-      <div className="inv2-content">
-        <CrossIcon />
+      <div className="lum-content">
+        <div className="lum-line" />
 
-        <p className="inv2-verse">
+        <p className="lum-quote">
           "For what God has joined together,{"\n"}
-          let no man put asunder.."{"\n"}
-          <span className="inv2-verse-ref">(Mark 9:10)</span>
+          let no man put asunder."
+        </p>
+        <p className="lum-quote-ref">— Mark 9:10</p>
+
+        <div className="lum-line" />
+
+        <p className="lum-body">
+          It is with the greatest pleasure that the
         </p>
 
-        <div className="inv2-families">
-          <div className="inv2-family">
-            <span className="inv2-family-name">{wedding.groom}</span>
-            <span className="inv2-family-label">Family</span>
-          </div>
-          <div className="inv2-divider" />
-          <div className="inv2-family">
-            <span className="inv2-family-name">{wedding.bride}</span>
-            <span className="inv2-family-label">Family</span>
-          </div>
+        <div className="lum-families">
+          <span className="lum-family-name">{wedding.groom} Family</span>
+          <span className="lum-ampersand">&amp;</span>
+          <span className="lum-family-name">{wedding.bride} Family</span>
         </div>
 
-        <p className="inv2-request">
-          Request the honor of your presence to celebrate{"\n"}
-          the wedding of their son and daughter
+        <p className="lum-body">
+          cordially invite you to celebrate{"\n"}the wedding of their son and daughter
         </p>
-
-        <div className="inv2-names-row">
-          <span className="inv2-partner">{wedding.groom}</span>
-          <span className="inv2-and">and</span>
-          <span className="inv2-partner">{wedding.bride}</span>
-        </div>
       </div>
-
-      <ScrollIndicator onClick={onContinue} />
     </div>
   );
 }

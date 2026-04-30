@@ -1,68 +1,34 @@
 import { wedding } from "../data";
-import ScrollIndicator from "./ScrollIndicator";
 
 interface InvitationProps {
   onContinue: () => void;
 }
 
-function HeartSvg() {
-  return (
-    <svg className="heart-svg" viewBox="0 0 80 74" fill="none">
-      <path
-        d="M40 67 C37 64 5 44 5 21 C5 10 14 3 25 3 C32 3 38 7 40 13 C42 7 48 3 55 3 C66 3 75 10 75 21 C75 44 43 64 40 67Z"
-        stroke="white"
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
+export default function Invitation({ onContinue: _onContinue }: InvitationProps) {
+  const d = new Date(wedding.date);
+  const weekday = d.toLocaleDateString("en-US", { weekday: "long" });
+  const month   = d.toLocaleDateString("en-US", { month: "long" });
+  const day     = d.getDate();
+  const year    = d.getFullYear();
 
-
-export default function Invitation({ onContinue }: InvitationProps) {
-  const weddingDate = new Date(wedding.date);
-  const weekday = weddingDate.toLocaleDateString("en-US", { weekday: "long" });
-  const month   = weddingDate.toLocaleDateString("en-US", { month: "long" });
-  const day     = weddingDate.getDate();
-  const year    = weddingDate.getFullYear();
-  const time    = weddingDate.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true });
+  const ordinal = (n: number) => {
+    const s = ["th","st","nd","rd"];
+    const v = n % 100;
+    return n + (s[(v - 20) % 10] ?? s[v] ?? s[0]);
+  };
 
   return (
     <div className="cover-screen">
-      <div className="cover-bg" />
-      <div className="cover-overlay inv-overlay" />
+      <div className="cover-overlay lum-overlay" />
 
-      <div className="inv-content">
-        <div className="we-do">
-          <span className="we-do-word">WE</span>
-          <HeartSvg />
-          <span className="we-do-word">DO</span>
-        </div>
-
-        <p className="inv-together">TOGETHER WITH THEIR FAMILIES</p>
-
-        <div className="inv-names-row">
-          <span className="inv-partner">{wedding.groom}</span>
-          <span className="inv-and">and</span>
-          <span className="inv-partner">{wedding.bride}</span>
-        </div>
-
-        <p className="inv-invite">INVITE YOU</p>
-        <p className="inv-invite">TO THEIR WEDDING CELEBRATION</p>
-
-        <div className="inv-date-block">
-          <span className="inv-month">{month}</span>
-          <div className="inv-date-row">
-            <span className="inv-weekday">{weekday}</span>
-            <span className="inv-day-num">{day}</span>
-            <span className="inv-time">At {time}</span>
-          </div>
-          <span className="inv-year">{year}</span>
-        </div>
+      <div className="lum-content lum-content--center">
+        <div className="lum-line" />
+        <p className="lum-couple-name">{wedding.groom} &amp; {wedding.bride}</p>
+        <div className="lum-line" />
+        <p className="lum-date">
+          {weekday}, {month} {ordinal(day)}, {year}
+        </p>
       </div>
-
-      <ScrollIndicator onClick={onContinue} />
     </div>
   );
 }

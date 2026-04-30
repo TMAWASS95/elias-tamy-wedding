@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { wedding } from "../data";
 
 interface CoverProps {
@@ -6,7 +5,8 @@ interface CoverProps {
 }
 
 export default function Cover({ onStart }: CoverProps) {
-  const dateLabel = new Date(wedding.date).toLocaleDateString("en-US", {
+  const { groom, bride, date } = wedding;
+  const dateLabel = new Date(date).toLocaleDateString("en-US", {
     weekday: "long",
     month: "long",
     day: "numeric",
@@ -14,49 +14,26 @@ export default function Cover({ onStart }: CoverProps) {
   });
 
   return (
-    <motion.div
-      className="cover-screen"
-      transition={{ duration: 0.6 }}
-    >
+    <div className="cover-screen" onClick={onStart} style={{ cursor: "pointer" }}>
+      {/* Static background only (no video on load) */}
       <div className="cover-bg" />
+
       <div className="cover-overlay" />
 
-      <div className="cover-content">
-        <motion.button
-          className="start-btn"
-          onClick={onStart}
-          initial={{ opacity: 0, scale: 0.7 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-          whileTap={{ scale: 0.93 }}
-        >
-          <span className="start-pulse" />
-          Start
-        </motion.button>
-
-        <motion.p
-          className="tap-text"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.6 }}
-        >
-          Tap to start
-        </motion.p>
+      {/* Centered initials */}
+      <div className="cover-initials">
+        <span className="cover-init-letter">{groom[0]}</span>
+        <span className="cover-init-heart">♥</span>
+        <span className="cover-init-letter">{bride[0]}</span>
       </div>
 
-      <motion.div
-        className="cover-names-bottom"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.3, duration: 0.8 }}
-      >
+      {/* Bottom: couple name + date */}
+      <div className="cover-names-bottom">
         <span className="cover-couple-name">
-          {wedding.groom} &amp; {wedding.bride}
+          {groom} &amp; {bride}
         </span>
         <span className="cover-date-label">{dateLabel}</span>
-      </motion.div>
-
-
-    </motion.div>
+      </div>
+    </div>
   );
 }

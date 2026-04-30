@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import ScrollIndicator from "./ScrollIndicator";
 import { wedding } from "../data";
 
 interface CountdownScreenProps {
@@ -17,8 +16,7 @@ function getTimeLeft() {
   };
 }
 
-
-export default function CountdownScreen({ onContinue }: CountdownScreenProps) {
+export default function CountdownScreen({ onContinue: _onContinue }: CountdownScreenProps) {
   const [time, setTime] = useState(getTimeLeft);
 
   useEffect(() => {
@@ -35,13 +33,13 @@ export default function CountdownScreen({ onContinue }: CountdownScreenProps) {
 
   return (
     <div className="cover-screen">
-      <div className="cover-bg" />
-      <div className="cover-overlay evt-overlay" />
+      <div className="cover-overlay lum-overlay" />
 
-      <div className="cd-content">
-        <div className="evt-header">
-          <span className="evt-the">the</span>
-          <span className="evt-celebration">Count Down</span>
+      <div className="lum-content lum-content--center">
+        <div className="lum-section-header">
+          <div className="lum-line" />
+          <span className="lum-section-title">Counting Down</span>
+          <div className="lum-line" />
         </div>
 
         <div className="cd-units">
@@ -53,8 +51,6 @@ export default function CountdownScreen({ onContinue }: CountdownScreenProps) {
           ))}
         </div>
       </div>
-
-      <ScrollIndicator onClick={onContinue} />
     </div>
   );
 }

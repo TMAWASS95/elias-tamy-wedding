@@ -1,9 +1,12 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
+import { collection, doc, getDoc, setDoc, addDoc, Timestamp } from "firebase/firestore";
+import { db, RSVPS_COLLECTION } from "../lib/firebase";
 
 interface RSVPScreenProps {
   onContinue: () => void;
   guestName?: string;
   maxGuests?: number;
+  slug?: string;
 }
 
 interface SelectOption { label: string; value: string; }
@@ -59,15 +62,37 @@ function CustomSelect({ label, value, onChange, options }: {
   );
 }
 
-export default function RSVPScreen({ onContinue, guestName, maxGuests }: RSVPScreenProps) {
+export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: RSVPScreenProps) {
   const [name, setName] = useState(guestName ?? "");
   const [guests, setGuests] = useState("0");
   const [rsvp, setRsvp] = useState("yes");
-  const [submitted, setSubmitted] = useState(false);
+  // "new" = just submitted, "existing" = was already submitted before, null = not yet submitted
+  const [submission, setSubmission] = useState<"new" | "existing" | null>(null);
+  const [checking, setChecking] = useState(!!(slug && db));
+  const [error, setError] = useState<string | null>(null);
 
-  const guestOptions: SelectOption[] = Array.from(
-    { length: (maxGuests ?? 10) + 1 },
-    (_, i) => ({ value: String(i), label: String(i) })
+  useEffect(() => {
+    if (!slug || !db) return;
+
+    let cancelled = false;
+    (async () => {
+      try {
+        const docSnap = await getDoc(doc(db, RSVPS_COLLECTION, slug));
+        if (cancelled) return;
+        if (docSnap.exists()) setSubmission("existing");
+      } catch {
+        // ignore errors during check
+      } finally {
+        if (!cancelled) setChecking(false);
+      }
+    })();
+
+    return () => { cancelled = true; };
+  }, [slug]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const guestOptions = useMemo<SelectOption[]>(
+    () => Array.from({ length: (maxGuests ?? 10) + 1 }, (_, i) => ({ value: String(i), label: String(i) })),
+    [maxGuests]
   );
 
   const rsvpOptions: SelectOption[] = [
@@ -75,26 +100,57 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests }: RSVPScr
     { value: "no",  label: "No"  },
   ];
 
-  const handleSubmit = (e: { preventDefault(): void }) => {
+  const handleSubmit = async (e: { preventDefault(): void }) => {
     e.preventDefault();
-    console.log({ name, guests, rsvp });
-    setSubmitted(true);
+    setError(null);
+    if (submission !== null) return;
+    if (!db) {
+      setError("RSVP saving is not set up yet. Please contact the couple.");
+      return;
+    }
+
+    const rsvpData = {
+      name,
+      attending: rsvp === "yes",
+      guests: Number(guests),
+      slug: slug ?? null,
+      createdAt: Timestamp.now(),
+    };
+
+    try {
+      if (slug) {
+        await setDoc(doc(db, RSVPS_COLLECTION, slug), rsvpData);
+      } else {
+        await addDoc(collection(db, RSVPS_COLLECTION), rsvpData);
+      }
+    } catch {
+      setError("Something went wrong. Please try again.");
+      return;
+    }
+
+    setSubmission("new");
     setTimeout(() => onContinue(), 1600);
   };
 
   return (
     <div className="cover-screen">
-      <div className="cover-bg" />
-      <div className="cover-overlay evt-overlay" />
+      <div className="cover-overlay lum-overlay" />
 
       <div className="rsvp-screen-content">
-        <div className="evt-header">
-          <span className="evt-the">the</span>
-          <span className="evt-celebration">RSVP</span>
+        <div className="lum-section-header">
+          <div className="lum-line" />
+          <span className="lum-section-title">RSVP</span>
+          <div className="lum-line" />
         </div>
 
-        {submitted ? (
-          <p className="rsvp-thanks">Thank you! We can't wait to celebrate with you.</p>
+        {checking ? (
+          <p className="rsvp-thanks">Loading...</p>
+        ) : submission !== null ? (
+          <p className="rsvp-thanks">
+            {submission === "existing"
+              ? "Thanks! Your RSVP is already recorded."
+              : "Thank you! We can't wait to celebrate with you."}
+          </p>
         ) : (
           <form className="rsvp-screen-form" onSubmit={handleSubmit}>
             <div className="rsvp-field">
@@ -122,7 +178,9 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests }: RSVPScr
               options={rsvpOptions}
             />
 
-            <button className="rsvp-submit-btn" type="submit">
+            {error && <p className="rsvp-error">{error}</p>}
+
+            <button className="rsvp-submit-btn" type="submit" disabled={submission !== null}>
               SUBMIT
             </button>
           </form>

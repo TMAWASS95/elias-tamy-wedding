@@ -15,10 +15,11 @@ export default function Cover({ onStart }: CoverProps) {
 
   return (
     <div className="cover-screen" onClick={onStart} style={{ cursor: "pointer" }}>
-      {/* Static background only (no video on load) */}
       <div className="cover-bg" />
-
       <div className="cover-overlay" />
+
+      {/* Ambient pulse ring behind the monogram */}
+      <div className="cover-pulse-ring" />
 
       {/* Centered initials */}
       <div className="cover-initials">
@@ -27,11 +28,13 @@ export default function Cover({ onStart }: CoverProps) {
         <span className="cover-init-letter">{bride[0]}</span>
       </div>
 
-      {/* Bottom: couple name + date */}
+      {/* Bottom: logo + date + tap hint */}
       <div className="cover-names-bottom">
-        <span className="cover-couple-name">
-          {groom} &amp; {bride}
-        </span>
+        <img
+          src={`${import.meta.env.BASE_URL}logo.png`}
+          alt={`${groom} & ${bride}`}
+          className="couple-logo couple-logo--cover"
+        />
         <span className="cover-date-label">{dateLabel}</span>
       </div>
     </div>

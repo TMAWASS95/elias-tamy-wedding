@@ -1,15 +1,12 @@
 import { useRef, useEffect, useState } from "react";
 import { Routes, Route, useParams } from "react-router-dom";
 import Cover from "./components/Cover";
-import Invitation from "./components/Invitation";
 import Invitation2 from "./components/Invitation2";
 import EventScreen from "./components/EventScreen";
-import TimelineScreen from "./components/TimelineScreen";
-import GiftRegistryScreen from "./components/GiftRegistryScreen";
 import CountdownScreen from "./components/CountdownScreen";
 import RSVPScreen from "./components/RSVPScreen";
 import AdminDashboard from "./components/AdminDashboard";
-import { guests, type GuestEntry } from "./data";
+import { guests, weddingEvents, type GuestEntry } from "./data";
 
 declare global {
   interface Window {
@@ -20,28 +17,29 @@ declare global {
 
 const YT_VIDEO_ID = "zcdMC_VScUE";
 
-// All sections use cover-sized background photos.
 const SECTION_IMAGES: (string | null)[] = [
-  import.meta.env.BASE_URL + "img2.jpg",
-  import.meta.env.BASE_URL + "img2.jpg",
-  import.meta.env.BASE_URL + "DAS 2148.jpg",
-  import.meta.env.BASE_URL + "DAS 2168.jpg",
-  import.meta.env.BASE_URL + "DAS 2174.jpg",
-  import.meta.env.BASE_URL + "DAS 2180.jpg",
-  import.meta.env.BASE_URL + "DAS couple.jpg",
-  import.meta.env.BASE_URL + "img2.jpg",
+  import.meta.env.BASE_URL + "img2.jpg",        // Cover
+  import.meta.env.BASE_URL + "img2.jpg",        // Invitation2
+  import.meta.env.BASE_URL + "DAS 2148.jpg",    // At My House
+  import.meta.env.BASE_URL + "DAS 2168.jpg",    // Ceremony
+  import.meta.env.BASE_URL + "DAS 2174.jpg",    // Welcome Drink
+  import.meta.env.BASE_URL + "DAS 2180.jpg",    // Dinner
+  import.meta.env.BASE_URL + "DAS couple.jpg",  // Countdown
+  import.meta.env.BASE_URL + "img2.jpg",        // RSVP
 ];
 
 function Wedding({ guest, slug }: { guest: GuestEntry | null; slug?: string }) {
   const [musicOn, setMusicOn] = useState(false);
-  const playerRef    = useRef<any>(null);
-  const sectionRefs  = useRef<(HTMLDivElement | null)[]>([]);
+  const [currentSection, setCurrentSection] = useState(0);
+  const playerRef        = useRef<any>(null);
+  const sectionRefs      = useRef<(HTMLDivElement | null)[]>([]);
+  const snapContainerRef = useRef<HTMLDivElement>(null);
 
   const scrollTo = (i: number) => {
     sectionRefs.current[i]?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // YouTube IFrame API — container lives outside React's DOM tree
+  // YouTube IFrame API
   useEffect(() => {
     const container = document.createElement("div");
     container.style.cssText =
@@ -73,6 +71,29 @@ function Wedding({ guest, slug }: { guest: GuestEntry | null; slug?: string }) {
     };
   }, []);
 
+  // Track visible section → add .in-view class for entrance animations
+  useEffect(() => {
+    const container = snapContainerRef.current;
+    if (!container) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in-view");
+            const idx = sectionRefs.current.indexOf(entry.target as HTMLDivElement);
+            if (idx !== -1) setCurrentSection(idx);
+          }
+        });
+      },
+      { threshold: 0.5, root: container }
+    );
+
+    const refs = sectionRefs.current.filter(Boolean) as HTMLDivElement[];
+    refs.forEach((ref) => observer.observe(ref));
+    return () => observer.disconnect();
+  }, []);
+
   const toggleMusic = () => {
     const p = playerRef.current;
     if (!p) return;
@@ -81,32 +102,32 @@ function Wedding({ guest, slug }: { guest: GuestEntry | null; slug?: string }) {
   };
 
   const screens = [
-    <Cover              onStart={()      => scrollTo(1)} />,
-    <Invitation2        onContinue={()   => scrollTo(2)} />,
-    <Invitation         onContinue={()   => scrollTo(3)} />,
-    <EventScreen        onContinue={()   => scrollTo(4)} />,
-    <TimelineScreen     onContinue={()   => scrollTo(5)} />,
-    <GiftRegistryScreen onContinue={()   => scrollTo(6)} />,
-    <CountdownScreen    onContinue={()   => scrollTo(7)} />,
-    <RSVPScreen         onContinue={()   => {}}
-                        guestName={guest?.name}
-                        maxGuests={guest?.maxGuests}
-                        slug={slug} />,
+    <Cover           onStart={()    => scrollTo(1)} />,
+    <Invitation2     onContinue={() => scrollTo(2)} />,
+    <EventScreen     onContinue={() => scrollTo(3)} event={weddingEvents[0]} />,
+    <EventScreen     onContinue={() => scrollTo(4)} event={weddingEvents[1]} />,
+    <EventScreen     onContinue={() => scrollTo(5)} event={weddingEvents[2]} />,
+    <EventScreen     onContinue={() => scrollTo(6)} event={weddingEvents[3]} />,
+    <CountdownScreen onContinue={() => scrollTo(7)} />,
+    <RSVPScreen      onContinue={() => {}}
+                     guestName={guest?.name}
+                     maxGuests={guest?.maxGuests}
+                     slug={slug} />,
   ];
 
   return (
     <div style={{ height: "100dvh", overflow: "hidden", background: "#0d0605" }}>
 
-      {/* Persistent music button — fixed to viewport, above all sections */}
+      {/* Persistent music button */}
       <button className="music-btn" onClick={toggleMusic} aria-label="Toggle music">
         {musicOn ? (
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#d4a44c" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d4a44c" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
             <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
             <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
           </svg>
         ) : (
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#d4a44c" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d4a44c" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
             <line x1="23" y1="9" x2="17" y2="15" />
             <line x1="17" y1="9" x2="23" y2="15" />
@@ -114,8 +135,20 @@ function Wedding({ guest, slug }: { guest: GuestEntry | null; slug?: string }) {
         )}
       </button>
 
-      {/* Single scrollable page — all sections stacked, snapping per viewport height */}
-      <div className="snap-container">
+      {/* Section navigation dots */}
+      <div className="nav-dots">
+        {screens.map((_, i) => (
+          <button
+            key={i}
+            className={`nav-dot${currentSection === i ? " active" : ""}`}
+            onClick={() => scrollTo(i)}
+            aria-label={`Go to section ${i + 1}`}
+          />
+        ))}
+      </div>
+
+      {/* Snap scroll container */}
+      <div className="snap-container" ref={snapContainerRef}>
         {screens.map((screen, i) => (
           <div
             key={i}
@@ -124,6 +157,23 @@ function Wedding({ guest, slug }: { guest: GuestEntry | null; slug?: string }) {
             style={SECTION_IMAGES[i] ? { backgroundImage: `url('${SECTION_IMAGES[i]}')` } : {}}
           >
             {screen}
+            {i < screens.length - 1 && (
+              <button
+                className="scroll-hint"
+                onClick={() => scrollTo(i + 1)}
+                aria-label="Scroll to next section"
+              >
+                <svg width="22" height="13" viewBox="0 0 22 13" fill="none">
+                  <polyline
+                    points="2,2 11,11 20,2"
+                    stroke="rgba(255,255,255,0.75)"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+            )}
           </div>
         ))}
       </div>

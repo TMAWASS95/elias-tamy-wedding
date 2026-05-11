@@ -1,8 +1,9 @@
-import { wedding } from "../data";
 import type { JSX } from "react";
+import type { WeddingEvent } from "../data";
 
 interface EventScreenProps {
   onContinue: () => void;
+  event: WeddingEvent;
 }
 
 function MapPinIcon() {
@@ -13,28 +14,12 @@ function MapPinIcon() {
   );
 }
 
-function BrideIcon() {
+function HomeIcon() {
   return (
-    <svg className="evt-icon-svg" viewBox="0 0 36 58" fill="none" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="18" cy="7" r="5.5" />
-      <path d="M12 5 Q4 10 7 20" strokeWidth="1" opacity="0.75" />
-      <path d="M11 18 Q18 15 25 18 L30 54 L6 54 Z" />
-      <path d="M13 27 Q18 29 23 27" strokeWidth="1" />
-    </svg>
-  );
-}
-
-function GroomIcon() {
-  return (
-    <svg className="evt-icon-svg" viewBox="0 0 36 58" fill="none" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="18" cy="7" r="5.5" />
-      <path d="M10 18 L10 38 L26 38 L26 18 Q22 14 18 14 Q14 14 10 18Z" />
-      <path d="M14 18 L18 24 L22 18" />
-      <path d="M15 21 L18 23 L21 21 L18 19 Z" fill="white" stroke="none" />
-      <line x1="13" y1="38" x2="11" y2="54" />
-      <line x1="23" y1="38" x2="25" y2="54" />
-      <line x1="9" y1="54" x2="15" y2="54" />
-      <line x1="21" y1="54" x2="27" y2="54" />
+    <svg className="evt-icon-svg" viewBox="0 0 44 58" fill="none" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 26 L22 8 L40 26" />
+      <rect x="6" y="26" width="32" height="22" rx="1" />
+      <rect x="15" y="36" width="13" height="12" rx="1" />
     </svg>
   );
 }
@@ -53,28 +38,40 @@ function ChurchIcon() {
   );
 }
 
-function GlassesIcon() {
+function DrinkIcon() {
   return (
-    <svg className="evt-icon-svg" viewBox="0 0 44 58" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M8 5 L12 32 Q12 38 17 38 Q22 38 22 32 L19 5" />
-      <path d="M25 5 L22 32 Q22 38 27 38 Q32 38 32 32 L36 5" />
-      <line x1="17" y1="38" x2="15" y2="50" />
-      <line x1="9" y1="50" x2="21" y2="50" />
-      <line x1="27" y1="38" x2="29" y2="50" />
-      <line x1="23" y1="50" x2="35" y2="50" />
-      <line x1="20" y1="11" x2="24" y2="15" strokeWidth="1.5" />
+    <svg className="evt-icon-svg" viewBox="0 0 44 58" fill="none" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M11 7 L17 7 L14 24 Z" />
+      <line x1="14" y1="24" x2="14" y2="40" />
+      <line x1="9"  y1="40" x2="19" y2="40" />
+      <path d="M27 7 L33 7 L30 24 Z" />
+      <line x1="30" y1="24" x2="30" y2="40" />
+      <line x1="25" y1="40" x2="35" y2="40" />
+      <path d="M15 12 Q22 16 29 12" strokeWidth="1" opacity="0.65" />
+    </svg>
+  );
+}
+
+function DinnerIcon() {
+  return (
+    <svg className="evt-icon-svg" viewBox="0 0 44 58" fill="none" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 32 Q5 12 22 12 Q39 12 39 32" />
+      <line x1="3" y1="32" x2="41" y2="32" />
+      <line x1="22" y1="4" x2="22" y2="12" />
+      <line x1="15" y1="4" x2="29" y2="4" />
+      <ellipse cx="22" cy="44" rx="15" ry="3" opacity="0.6" />
     </svg>
   );
 }
 
 const iconMap: Record<string, JSX.Element> = {
-  bride:     <BrideIcon />,
-  groom:     <GroomIcon />,
-  church:    <ChurchIcon />,
-  reception: <GlassesIcon />,
+  home:    <HomeIcon />,
+  church:  <ChurchIcon />,
+  drink:   <DrinkIcon />,
+  dinner:  <DinnerIcon />,
 };
 
-export default function EventScreen({ onContinue: _onContinue }: EventScreenProps) {
+export default function EventScreen({ onContinue: _onContinue, event }: EventScreenProps) {
   return (
     <div className="cover-screen">
       <div className="cover-overlay lum-overlay" />
@@ -82,31 +79,30 @@ export default function EventScreen({ onContinue: _onContinue }: EventScreenProp
       <div className="evt-content">
         <div className="lum-section-header">
           <div className="lum-line" />
-          <span className="lum-section-title">The Celebration</span>
+          <span className="lum-section-title">{event.title}</span>
           <div className="lum-line" />
         </div>
 
-        {wedding.locations.map((loc, i) => (
-          <div key={loc.id} className="evt-item-wrap">
-            <div className="evt-row">
-              <div className="evt-row-icon">{iconMap[loc.id]}</div>
-              <div className="evt-row-details">
-                <span className="evt-row-name">{loc.name}</span>
-                {loc.address && <span className="evt-row-sub">{loc.address}</span>}
-                {loc.time    && <span className="evt-row-sub">{loc.time}</span>}
+        <div className="glass-card">
+          <div className="evt-row">
+            <div className="evt-row-icon">{iconMap[event.icon]}</div>
+            <div className="evt-row-details">
+              <span className="evt-row-name">{event.name}</span>
+              {event.address && <span className="evt-row-sub">{event.address}</span>}
+              {event.time    && <span className="evt-row-sub">{event.time}</span>}
+              {event.mapUrl  && (
                 <a
                   className="evt-directions"
-                  href={loc.mapUrl}
+                  href={event.mapUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   <MapPinIcon /> Get Directions
                 </a>
-              </div>
+              )}
             </div>
-            {i < wedding.locations.length - 1 && <div className="evt-divider" />}
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { collection, doc, getDoc, setDoc, addDoc, Timestamp } from "firebase/firestore";
 import { db, RSVPS_COLLECTION } from "../lib/firebase";
+import { wedding } from "../data";
 
 interface RSVPScreenProps {
   onContinue: () => void;
@@ -9,96 +10,60 @@ interface RSVPScreenProps {
   slug?: string;
 }
 
-interface SelectOption { label: string; value: string; }
-
-function CustomSelect({ label, value, onChange, options }: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  options: SelectOption[];
+function GuestStepper({
+  value,
+  onChange,
+  max,
+}: {
+  value: number;
+  onChange: (v: number) => void;
+  max: number;
 }) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
-
-  const selected = options.find((o) => o.value === value);
-
   return (
-    <div className="rsvp-field" ref={ref}>
-      <span className="rsvp-select-label">{label}</span>
+    <div className="rsvp-stepper">
       <button
         type="button"
-        className={`rsvp-custom-trigger ${open ? "open" : ""}`}
-        onClick={() => setOpen((o) => !o)}
+        className="rsvp-stepper-btn"
+        onClick={() => onChange(Math.max(0, value - 1))}
+        aria-label="Remove guest"
       >
-        <span>{selected?.label ?? value}</span>
-        <svg className={`rsvp-custom-chevron ${open ? "flipped" : ""}`} viewBox="0 0 20 12" fill="none">
-          <polyline points="2,2 10,10 18,2" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        −
       </button>
-
-      {open && (
-        <div className="rsvp-custom-panel">
-          {options.map((opt) => (
-            <button
-              type="button"
-              key={opt.value}
-              className={`rsvp-custom-option ${opt.value === value ? "selected" : ""}`}
-              onClick={() => { onChange(opt.value); setOpen(false); }}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
-      )}
+      <span className="rsvp-stepper-value">{value}</span>
+      <button
+        type="button"
+        className="rsvp-stepper-btn"
+        onClick={() => onChange(Math.min(max, value + 1))}
+        aria-label="Add guest"
+      >
+        +
+      </button>
     </div>
   );
 }
 
 export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: RSVPScreenProps) {
-  const [name, setName] = useState(guestName ?? "");
-  const [guests, setGuests] = useState("0");
-  const [rsvp, setRsvp] = useState("yes");
-  // "new" = just submitted, "existing" = was already submitted before, null = not yet submitted
+  const [name, setName]         = useState(guestName ?? "");
+  const [guests, setGuests]     = useState(0);
+  const [rsvp, setRsvp]         = useState<"yes" | "no">("yes");
   const [submission, setSubmission] = useState<"new" | "existing" | null>(null);
   const [checking, setChecking] = useState(!!(slug && db));
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError]       = useState<string | null>(null);
 
   useEffect(() => {
     if (!slug || !db) return;
-
     let cancelled = false;
     (async () => {
       try {
         const docSnap = await getDoc(doc(db, RSVPS_COLLECTION, slug));
         if (cancelled) return;
         if (docSnap.exists()) setSubmission("existing");
-      } catch {
-        // ignore errors during check
-      } finally {
+      } catch { /* ignore */ } finally {
         if (!cancelled) setChecking(false);
       }
     })();
-
     return () => { cancelled = true; };
   }, [slug]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const guestOptions = useMemo<SelectOption[]>(
-    () => Array.from({ length: (maxGuests ?? 10) + 1 }, (_, i) => ({ value: String(i), label: String(i) })),
-    [maxGuests]
-  );
-
-  const rsvpOptions: SelectOption[] = [
-    { value: "yes", label: "Yes" },
-    { value: "no",  label: "No"  },
-  ];
 
   const handleSubmit = async (e: { preventDefault(): void }) => {
     e.preventDefault();
@@ -112,7 +77,7 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
     const rsvpData = {
       name,
       attending: rsvp === "yes",
-      guests: Number(guests),
+      guests: rsvp === "yes" ? guests : 0,
       slug: slug ?? null,
       createdAt: Timestamp.now(),
     };
@@ -132,6 +97,13 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
     setTimeout(() => onContinue(), 1600);
   };
 
+  const dateStr = new Date(wedding.date).toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+
   return (
     <div className="cover-screen">
       <div className="cover-overlay lum-overlay" />
@@ -143,8 +115,12 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
           <div className="lum-line" />
         </div>
 
+        <p className="lum-body lum-body--muted" style={{ marginBottom: 16 }}>
+          {dateStr}
+        </p>
+
         {checking ? (
-          <p className="rsvp-thanks">Loading...</p>
+          <p className="rsvp-thanks">Loading…</p>
         ) : submission !== null ? (
           <p className="rsvp-thanks">
             {submission === "existing"
@@ -153,10 +129,13 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
           </p>
         ) : (
           <form className="rsvp-screen-form" onSubmit={handleSubmit}>
+
+            {/* Name */}
             <div className="rsvp-field">
+              <span className="rsvp-field-label">Your Name</span>
               <input
                 className="rsvp-input"
-                placeholder="Name"
+                placeholder="Full name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 readOnly={!!guestName}
@@ -164,24 +143,43 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
               />
             </div>
 
-            <CustomSelect
-              label="Additional Guests"
-              value={guests}
-              onChange={setGuests}
-              options={guestOptions}
-            />
+            {/* Attendance pills */}
+            <div className="rsvp-field">
+              <span className="rsvp-field-label">Will you attend?</span>
+              <div className="rsvp-pill-group">
+                <button
+                  type="button"
+                  className={`rsvp-pill${rsvp === "yes" ? " rsvp-pill--active" : ""}`}
+                  onClick={() => setRsvp("yes")}
+                >
+                  Joyfully accepts
+                </button>
+                <button
+                  type="button"
+                  className={`rsvp-pill${rsvp === "no" ? " rsvp-pill--active rsvp-pill--decline" : ""}`}
+                  onClick={() => setRsvp("no")}
+                >
+                  Regretfully declines
+                </button>
+              </div>
+            </div>
 
-            <CustomSelect
-              label="RSVP"
-              value={rsvp}
-              onChange={setRsvp}
-              options={rsvpOptions}
-            />
+            {/* Guest stepper — only shown when attending */}
+            {rsvp === "yes" && (
+              <div className="rsvp-field">
+                <span className="rsvp-field-label">Additional Guests</span>
+                <GuestStepper
+                  value={guests}
+                  onChange={setGuests}
+                  max={maxGuests ?? 10}
+                />
+              </div>
+            )}
 
             {error && <p className="rsvp-error">{error}</p>}
 
-            <button className="rsvp-submit-btn" type="submit" disabled={submission !== null}>
-              SUBMIT
+            <button className="rsvp-submit-btn" type="submit">
+              Confirm RSVP
             </button>
           </form>
         )}

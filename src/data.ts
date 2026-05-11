@@ -13,16 +13,56 @@ export const wedding = {
   giftRegistry: {
     id: "*******-03",
   },
-  locations: [
-    {
-      id: "reception",
-      name: "Alyasa Village",
-      address: "Saqi, Rechmaiya" as string | null,
-      time: "6:30 PM" as string | null,
-      mapUrl: "https://maps.google.com/?q=5Q5P%2B3M+Saqi+Rechmaiya",
-    },
-  ],
 };
+
+export type WeddingEvent = {
+  id: string;
+  title: string;
+  name: string;
+  address: string | null;
+  time: string | null;
+  mapUrl: string | null;
+  icon: string;
+};
+
+export const weddingEvents: WeddingEvent[] = [
+  {
+    id: "home",
+    title: "At My House",
+    name: "Our Home",
+    address: null,
+    time: null,
+    mapUrl: null,
+    icon: "home",
+  },
+  {
+    id: "ceremony",
+    title: "Ceremony",
+    name: "Alyasa Village",
+    address: "Saqi, Rechmaiya",
+    time: "6:30 PM",
+    mapUrl: "https://maps.google.com/?q=5Q5P%2B3M+Saqi+Rechmaiya",
+    icon: "church",
+  },
+  {
+    id: "welcomeDrink",
+    title: "Welcome Drink",
+    name: "Alyasa Village",
+    address: "Saqi, Rechmaiya",
+    time: "7:30 PM",
+    mapUrl: "https://maps.google.com/?q=5Q5P%2B3M+Saqi+Rechmaiya",
+    icon: "drink",
+  },
+  {
+    id: "dinner",
+    title: "Dinner",
+    name: "Alyasa Village",
+    address: "Saqi, Rechmaiya",
+    time: "8:30 PM",
+    mapUrl: "https://maps.google.com/?q=5Q5P%2B3M+Saqi+Rechmaiya",
+    icon: "dinner",
+  },
+];
 
 export type GuestEntry = {
   slug: string;      // URL segment, e.g. "john-doe"  → /john-doe

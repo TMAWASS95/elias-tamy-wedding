@@ -2,7 +2,7 @@
 
 ## Steps
 
-- [ ] 1. Update `vite.config.ts` with `base: '/elias-tamy-wedding/'`
+- [ ] 1. Update `vite.config.ts` with `base: '/'`
 - [ ] 2. Update `src/App.tsx` to use `import.meta.env.BASE_URL` for image paths
 - [ ] 3. Update `src/main.tsx` to use `HashRouter` instead of `BrowserRouter`
 - [ ] 4. Update `package.json` with `homepage` field

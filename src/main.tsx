@@ -13,7 +13,7 @@ if (redirectPath) {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <BrowserRouter basename="/elias-tamy-wedding">
+    <BrowserRouter>
       <App />
     </BrowserRouter>
   </React.StrictMode>

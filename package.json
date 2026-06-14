@@ -2,7 +2,7 @@
   "name": "wedding-microsite",
   "private": true,
   "version": "1.0.0",
-  "homepage": "https://tmawass95.github.io/elias-tamy-wedding/",
+  "homepage": "https://tmawass95.github.io/",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -5,6 +5,7 @@ import Invitation2 from "./components/Invitation2";
 import EventScreen from "./components/EventScreen";
 import CountdownScreen from "./components/CountdownScreen";
 import RSVPScreen from "./components/RSVPScreen";
+import DrunkPrinceScreen from "./components/DrunkPrinceScreen";
 import AdminDashboard from "./components/AdminDashboard";
 import { guests, weddingEvents, type GuestEntry } from "./data";
 
@@ -26,6 +27,7 @@ const SECTION_IMAGES: (string | null)[] = [
   import.meta.env.BASE_URL + "DAS 2180.jpg",    // Dinner
   import.meta.env.BASE_URL + "DAS couple.jpg",  // Countdown
   import.meta.env.BASE_URL + "img2.jpg",        // RSVP
+  import.meta.env.BASE_URL + "drunk-prince.jpg", // The Drunk Prince (final)
 ];
 
 function Wedding({ guest, slug }: { guest: GuestEntry | null; slug?: string }) {
@@ -113,6 +115,7 @@ function Wedding({ guest, slug }: { guest: GuestEntry | null; slug?: string }) {
                      guestName={guest?.name}
                      maxGuests={guest?.maxGuests}
                      slug={slug} />,
+    <DrunkPrinceScreen onContinue={() => {}} />,
   ];
 
   return (

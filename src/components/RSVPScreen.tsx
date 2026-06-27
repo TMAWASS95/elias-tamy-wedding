@@ -108,7 +108,9 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
           <div className="lum-line" />
         </div>
 
-        <p className="rsvp-deadline">Kindly confirm your attendance before August 10, 2026</p>
+        {submission === null && (
+          <p className="rsvp-deadline">Kindly confirm your attendance before August 10, 2026</p>
+        )}
 
         {checking ? (
           <p className="rsvp-thanks">Loading…</p>

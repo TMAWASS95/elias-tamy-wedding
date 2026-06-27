@@ -33,7 +33,7 @@ export default function Cover({ onStart }: CoverProps) {
         <p className="lum-body lum-body--art">It is with the greatest pleasure that the</p>
 
         <div className="lum-families">
-          <span className="lum-family-name">Charles Nassrany Family</span>
+          <span className="lum-family-name">Charles Nasrany Family</span>
           <span className="lum-ampersand">&amp;</span>
           <span className="lum-family-name">Georges Mawass Family</span>
         </div>

@@ -52,6 +52,17 @@ function DrinkIcon() {
   );
 }
 
+function ArchIcon() {
+  return (
+    <svg className="evt-icon-svg" viewBox="0 0 44 58" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      {/* Alyasa Village — three concentric arches */}
+      <path d="M8 50 L8 24 Q8 8 22 8 Q36 8 36 24 L36 50" />
+      <path d="M13.5 50 L13.5 26 Q13.5 14 22 14 Q30.5 14 30.5 26 L30.5 50" />
+      <path d="M19 50 L19 28 Q19 20 22 20 Q25 20 25 28 L25 50" />
+    </svg>
+  );
+}
+
 function DinnerIcon() {
   return (
     <svg className="evt-icon-svg" viewBox="0 0 44 58" fill="none" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
@@ -69,6 +80,7 @@ const iconMap: Record<string, JSX.Element> = {
   church:  <ChurchIcon />,
   drink:   <DrinkIcon />,
   dinner:  <DinnerIcon />,
+  arch:    <ArchIcon />,
 };
 
 export default function EventScreen({ onContinue: _onContinue, event }: EventScreenProps) {
@@ -83,25 +95,56 @@ export default function EventScreen({ onContinue: _onContinue, event }: EventScr
           <div className="lum-line" />
         </div>
 
+        {event.description && (
+          <p className="lum-body lum-body--muted evt-description">{event.description}</p>
+        )}
+
         <div className="glass-card">
-          <div className="evt-row">
-            <div className="evt-row-icon">{iconMap[event.icon]}</div>
-            <div className="evt-row-details">
-              <span className="evt-row-name">{event.name}</span>
-              {event.address && <span className="evt-row-sub">{event.address}</span>}
-              {event.time    && <span className="evt-row-sub">{event.time}</span>}
-              {event.mapUrl  && (
-                <a
-                  className="evt-directions"
-                  href={event.mapUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <MapPinIcon /> Get Directions
-                </a>
-              )}
+          {event.parties ? (
+            <div className="evt-parties">
+              {event.parties.map((party) => (
+                <div className="evt-row" key={party.label}>
+                  <div className="evt-row-icon">{iconMap[event.icon]}</div>
+                  <div className="evt-row-details">
+                    <span className="evt-row-label">{party.label}</span>
+                    <span className="evt-row-name">{party.name}</span>
+                    {party.sub  && <span className="evt-row-sub">{party.sub}</span>}
+                    {party.time && <span className="evt-row-sub">{party.time}</span>}
+                    {party.mapUrl && (
+                      <a
+                        className="evt-directions"
+                        href={party.mapUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <MapPinIcon /> Get Directions
+                      </a>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
-          </div>
+          ) : (
+            <div className="evt-row">
+              <div className="evt-row-icon">{iconMap[event.icon]}</div>
+              <div className="evt-row-details">
+                <span className="evt-row-name">{event.name}</span>
+                {event.sub     && <span className="evt-row-sub">{event.sub}</span>}
+                {event.time    && <span className="evt-row-sub">{event.time}</span>}
+                {event.address && <span className="evt-row-sub">{event.address}</span>}
+                {event.mapUrl  && (
+                  <a
+                    className="evt-directions"
+                    href={event.mapUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <MapPinIcon /> Get Directions
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

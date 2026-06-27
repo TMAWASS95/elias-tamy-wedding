@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { collection, doc, getDoc, setDoc, addDoc, Timestamp } from "firebase/firestore";
 import { db, RSVPS_COLLECTION } from "../lib/firebase";
-import { wedding } from "../data";
 
 interface RSVPScreenProps {
   onContinue: () => void;
@@ -44,6 +43,7 @@ function GuestStepper({
 
 export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: RSVPScreenProps) {
   const [name, setName]         = useState(guestName ?? "");
+  const [phone, setPhone]       = useState("");
   const [guests, setGuests]     = useState(0);
   const [rsvp, setRsvp]         = useState<"yes" | "no">("yes");
   const [submission, setSubmission] = useState<"new" | "existing" | null>(null);
@@ -76,19 +76,19 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
 
     const rsvpData = {
       name,
+      phone: phone.trim() || null,
       attending: rsvp === "yes",
       guests: rsvp === "yes" ? guests : 0,
       slug: slug ?? null,
       createdAt: Timestamp.now(),
     };
-
     try {
       if (slug) {
         await setDoc(doc(db, RSVPS_COLLECTION, slug), rsvpData);
       } else {
         await addDoc(collection(db, RSVPS_COLLECTION), rsvpData);
       }
-    } catch {
+    } catch (err: any) {
       setError("Something went wrong. Please try again.");
       return;
     }
@@ -97,16 +97,9 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
     setTimeout(() => onContinue(), 1600);
   };
 
-  const dateStr = new Date(wedding.date).toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-
   return (
     <div className="cover-screen">
-      <div className="cover-overlay lum-overlay" />
+      <div className="cover-overlay lum-overlay rsvp-overlay" />
 
       <div className="rsvp-screen-content">
         <div className="lum-section-header">
@@ -115,9 +108,7 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
           <div className="lum-line" />
         </div>
 
-        <p className="lum-body lum-body--muted" style={{ marginBottom: 16 }}>
-          {dateStr}
-        </p>
+        <p className="rsvp-deadline">Kindly confirm your attendance before August 10, 2026</p>
 
         {checking ? (
           <p className="rsvp-thanks">Loading…</p>
@@ -133,15 +124,19 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
             {/* Name */}
             <div className="rsvp-field">
               <span className="rsvp-field-label">Your Name</span>
-              <input
-                className="rsvp-input"
-                placeholder="Full name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                readOnly={!!guestName}
-                required
-              />
+              {guestName ? (
+                <p className="rsvp-name-display">{name}</p>
+              ) : (
+                <input
+                  className="rsvp-input"
+                  placeholder="Full name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              )}
             </div>
+
 
             {/* Attendance pills */}
             <div className="rsvp-field">
@@ -167,7 +162,7 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
             {/* Guest stepper — only shown when attending */}
             {rsvp === "yes" && (
               <div className="rsvp-field">
-                <span className="rsvp-field-label">Additional Guests</span>
+                <span className="rsvp-field-label">Attending</span>
                 <GuestStepper
                   value={guests}
                   onChange={setGuests}
@@ -178,9 +173,38 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
 
             {error && <p className="rsvp-error">{error}</p>}
 
+            <p className="rsvp-contact-note">
+              Kindly confirm your presence by clicking the button below.
+            </p>
+
             <button className="rsvp-submit-btn" type="submit">
               Confirm RSVP
             </button>
+
+            <p className="rsvp-contact-note">
+              Or send your response to one of the numbers below.
+            </p>
+
+            <div className="rsvp-contacts">
+              <a
+                className="rsvp-contact"
+                href="https://wa.me/96170212399"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span className="rsvp-contact-label">Groom</span>
+                <span className="rsvp-contact-num">70 212 399</span>
+              </a>
+              <a
+                className="rsvp-contact"
+                href="https://wa.me/96176795349"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span className="rsvp-contact-label">Bride</span>
+                <span className="rsvp-contact-num">76 795 349</span>
+              </a>
+            </div>
           </form>
         )}
       </div>

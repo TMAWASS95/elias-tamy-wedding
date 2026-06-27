@@ -11,82 +11,138 @@ export const wedding = {
   ],
   mapUrl: "https://maps.google.com/?q=5Q5P%2B3M+Saqi+Rechmaiya",
   giftRegistry: {
-    id: "*******-03",
+    note: "Your presence is the greatest gift of all. Should you wish to honour us with a gift, you can send it to our Whish account below.",
+    accountLabel: "Whish Account",
+    accountHolder: "Elias & Tamy",
+    accountNumber: "20231829-03",
   },
+};
+
+export type EventParty = {
+  label: string;          // e.g. "Groom" / "Bride"
+  name: string;           // venue name
+  sub: string | null;     // specific spot within the venue
+  time: string | null;    // get-ready time
+  mapUrl?: string | null; // directions link
 };
 
 export type WeddingEvent = {
   id: string;
   title: string;
   name: string;
+  sub?: string | null;   // secondary line under the venue (e.g. church)
   address: string | null;
   time: string | null;
   mapUrl: string | null;
   icon: string;
+  description?: string;
+  parties?: EventParty[];
 };
 
 export const weddingEvents: WeddingEvent[] = [
   {
     id: "home",
-    title: "At My House",
+    title: "Getting Ready",
     name: "Our Home",
     address: null,
     time: null,
     mapUrl: null,
-    icon: "home",
+    icon: "arch",
+    description: "The groom and bride will each welcome guests at their place before the ceremony — feel free to join us early.",
+    parties: [
+      { label: "Groom welcomes you at", name: "Alyasa Village", sub: "The Villa", time: "from 4:30 PM", mapUrl: "https://maps.google.com/?q=5Q5P%2B3M+Saqi+Rechmaiya" },
+      { label: "Bride welcomes you at", name: "Alyasa Village", sub: "The Idle Lounge", time: "from 4:30 PM", mapUrl: "https://maps.google.com/?q=5Q5P%2B3M+Saqi+Rechmaiya" },
+    ],
   },
   {
     id: "ceremony",
     title: "Ceremony",
     name: "Alyasa Village",
-    address: "Saqi, Rechmaiya",
+    sub: "Saint Alishaa Church",
+    address: null,
     time: "6:30 PM",
     mapUrl: "https://maps.google.com/?q=5Q5P%2B3M+Saqi+Rechmaiya",
-    icon: "church",
-  },
-  {
-    id: "welcomeDrink",
-    title: "Welcome Drink",
-    name: "Alyasa Village",
-    address: "Saqi, Rechmaiya",
-    time: "7:30 PM",
-    mapUrl: "https://maps.google.com/?q=5Q5P%2B3M+Saqi+Rechmaiya",
-    icon: "drink",
+    icon: "arch",
   },
   {
     id: "dinner",
-    title: "Dinner",
+    title: "Dinner Reception",
+    sub: "The Arcadia Pool Venue",
     name: "Alyasa Village",
-    address: "Saqi, Rechmaiya",
+    address: null,
     time: "8:30 PM",
     mapUrl: "https://maps.google.com/?q=5Q5P%2B3M+Saqi+Rechmaiya",
-    icon: "dinner",
+    icon: "arch",
   },
 ];
 
 export type GuestEntry = {
-  slug: string;      // URL segment, e.g. "john-doe"  → /john-doe
-  name: string;      // pre-filled in the RSVP form
-  maxGuests: number; // max additional guests this person may bring
+  slug: string;              // URL segment, e.g. "john-doe"  → /john-doe
+  name: string;              // pre-filled in the RSVP form
+  maxGuests: number;         // max attendies guests this person may bring
+  title?: "Mr" | "Mrs";      // honorific shown before the name
+  withFamily?: boolean;      // append "& his/her family"
 };
 
+// First names used to infer Mr/Mrs for single-name guests.
+// Override per guest with the `title` field if any of these is wrong.
+const MALE_FIRST_NAMES = new Set([
+  "georges", "elias", "elie", "charbel", "kamal", "thomas", "gilbert", "paul",
+  "ali", "roudy", "jad", "alain", "nadim", "karl", "wissam", "jack", "jacques",
+]);
+const FEMALE_FIRST_NAMES = new Set([
+  "christine", "rouba", "samira", "rita", "marie", "donara", "serena",
+  "elika", "carole",
+]);
+
+function inferTitle(name: string): "Mr" | "Mrs" | undefined {
+  const first = name.trim().split(/\s+/)[0].toLowerCase();
+  if (MALE_FIRST_NAMES.has(first)) return "Mr";
+  if (FEMALE_FIRST_NAMES.has(first)) return "Mrs";
+  return undefined;
+}
+
+/**
+ * Builds the display name. Couples get a title each, e.g.
+ * "Mr. Elie and Mrs. Nawal Chammas"; entries bringing more than two
+ * guests are suffixed with "and Family".
+ */
+export function formatGuestName(g: GuestEntry): string {
+  const hasFamily = g.withFamily ?? g.maxGuests > 2;
+  const family = hasFamily ? " and Family" : "";
+
+  // Couples: the man and the woman each get their own title.
+  // Defaults to Mr. for the first name and Mrs. for the second; the
+  // name lists above override this when the order differs.
+  if (g.name.includes("&")) {
+    const [a, b] = g.name.split("&").map((s) => s.trim());
+    const titleA = inferTitle(a) ?? "Mr";
+    const titleB = inferTitle(b) ?? "Mrs";
+    return `${titleA}. ${a} and ${titleB}. ${b}${family}`;
+  }
+
+  const t = g.title ?? inferTitle(g.name);
+  const title = t ? `${t}. ` : "";
+  return `${title}${g.name}${family}`;
+}
+
 export const guests: GuestEntry[] = [
-  { slug: "georges",   name: "Georges",   maxGuests: 2 },
+  { slug: "georges",   name: "Georges",   maxGuests: 999 },
   { slug: "christine", name: "Christine", maxGuests: 2 },
   { slug: "rouba",     name: "Rouba",     maxGuests: 8 },
-  // Unlimited additional guests
-  { slug: "charles-antoinette-nasrany", name: "Charles & Antoinette Nasrany", maxGuests: 999 },
-  { slug: "nicolas-christelle-anaissy", name: "Nicolas & Christelle Anaissy", maxGuests: 999 },
-  { slug: "tony-marleine-nasrany", name: "Tony & Marleine Nasrany", maxGuests: 999 },
-  { slug: "georges-rebecca", name: "Georges & Rebecca", maxGuests: 2 },
-  { slug: "freddy-perla", name: "Freddy & Perla", maxGuests: 2 },
-  { slug: "rony-jessy", name: "Rony & Jessy", maxGuests: 4 },
-  { slug: "joseph-jihane", name: "Joseph & Jihane", maxGuests: 4 },
-  { slug: "jack-therese", name: "Jack & Therese", maxGuests: 2 },
+  // Unlimited Attendies guests
+  { slug: "charles-antoinette-nasrany", name: "Charles & Antoinette Nasrany", maxGuests: 10 },
+  { slug: "nicolas-christelle-anaissy", name: "Nicolas & Christelle Anaissy", maxGuests: 10 },
+  { slug: "tony-marleine-nasrany", name: "Tony & Marleine Nasrany", maxGuests: 10 },
+  { slug: "rebecca-daou", name: "Rebecca Daou", maxGuests: 2 },
+  { slug: "perla-jabbour", name: "Perla Jabbour", maxGuests: 1 },
+  { slug: "rony-jessica-nassrany", name: "Rony & Jessica Nassrany", maxGuests: 4 },
+  { slug: "joseph-jihane-nassrany", name: "Joseph & Jihane Nassrany", maxGuests: 4 },
+  { slug: "jack-therese-nassrany", name: "Jack & Therese Nassrany", maxGuests: 2 },
   { slug: "joe-cendrella-chdid", name: "Joe & Cendrella Chdid", maxGuests: 3 },
   { slug: "roy-stephanie", name: "Roy & Stephanie", maxGuests: 3 },
   { slug: "samira-anaissy", name: "Samira Anaissy", maxGuests: 1 },
-  { slug: "nizar-anna", name: "Nizar & Anna", maxGuests: 2 },
+  { slug: "nizar-anna-khaleed", name: "Nizar & Anna Khaleed", maxGuests: 2 },
   { slug: "fady-rida-bou-saad", name: "Fady & Rida Bou Saad", maxGuests: 4 },
   { slug: "brandan-nabhan", name: "Brandan & Antonella", maxGuests: 1 },
   { slug: "elias-maria-hachem", name: "Elias & Maria Hachem", maxGuests: 2 },
@@ -103,8 +159,7 @@ export const guests: GuestEntry[] = [
   { slug: "charbel-merhi", name: "Charbel Merhi", maxGuests: 1 },
   { slug: "marie-hussein", name: "Marie Hussein", maxGuests: 1 },
   { slug: "thomas-abboud", name: "Thomas Abboud", maxGuests: 1 },
-  { slug: "nicole-shasheen", name: "Nicole Shasheen", maxGuests: 1 },
-  { slug: "jawad-syrine", name: "Jawad & Syrine", maxGuests: 2 },
+  { slug: "jawad-sirine", name: "Jawad Bou Youness & Sirine Wahidi", maxGuests: 2 },
   { slug: "ahmad-maha", name: "Ahmad Sibai & Maha Abou Jaoude", maxGuests: 2 },
   { slug: "gilbert-abi-rizk", name: "Gilbert Abi Rizk", maxGuests: 1 },
   { slug: "jad-louloua", name: "Jad Saoudi & Louloua Salhab", maxGuests: 2 },
@@ -129,9 +184,9 @@ export const guests: GuestEntry[] = [
 
  { slug: "georges-joulia-mawass", name: "Georges & Joulia Mawass", maxGuests: 999 },
  { slug: "charbel-remy-ferik", name: "Charbel & Remy Ferik", maxGuests: 2 },
- { slug: "rizk-andrea-mawass", name: "Rizk & Andrea Mawass", maxGuests: 999 },
+ { slug: "rizk-andrea-mawass", name: "Rizk & Andrea Mawass", maxGuests: 10 },
  { slug: "kayssar-addam", name: "Kayssar & Addam", maxGuests: 2 },
- { slug: "eddy-elida-daou", name: "Eddy & Elida Daou", maxGuests: 999 },
+ { slug: "eddy-elida-daou", name: "Eddy & Elida Daou", maxGuests: 10 },
  { slug: "raymond-mireille-daou", name: "Raymond & Mireille Daou", maxGuests: 2 },
  { slug: "Wissam-ramona-", name: "Wissam & Ramona ", maxGuests: 2 },
  { slug: "pierre-katia-azzi", name: "Pierre & Katia Azzi", maxGuests: 3 },

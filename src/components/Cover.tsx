@@ -5,37 +5,42 @@ interface CoverProps {
 }
 
 export default function Cover({ onStart }: CoverProps) {
-  const { groom, bride, date } = wedding;
-  const dateLabel = new Date(date).toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
+  const { groom, bride } = wedding;
 
   return (
-    <div className="cover-screen" onClick={onStart} style={{ cursor: "pointer" }}>
-      <div className="cover-bg" />
-      <div className="cover-overlay" />
+    <div className="cover-screen intro-screen" onClick={onStart} style={{ cursor: "pointer" }}>
+      <div className="cover-overlay lum-overlay" />
 
-      {/* Ambient pulse ring behind the monogram */}
-      <div className="cover-pulse-ring" />
+      <div className="intro-content">
+        {/* Monogram */}
+        <div className="intro-monogram">
+          <span className="cover-init-letter">{groom[0]}</span>
+          <span className="cover-init-heart">♥</span>
+          <span className="cover-init-letter">{bride[0]}</span>
+        </div>
 
-      {/* Centered initials */}
-      <div className="cover-initials">
-        <span className="cover-init-letter">{groom[0]}</span>
-        <span className="cover-init-heart">♥</span>
-        <span className="cover-init-letter">{bride[0]}</span>
-      </div>
+        <div className="lum-line" />
 
-      {/* Bottom: logo + date + tap hint */}
-      <div className="cover-names-bottom">
-        <img
-          src={`${import.meta.env.BASE_URL}logo.png`}
-          alt={`${groom} & ${bride}`}
-          className="couple-logo couple-logo--cover"
-        />
-        <span className="cover-date-label">{dateLabel}</span>
+        {/* Invitation quote */}
+        <p className="lum-quote">
+          "For what God has joined together,{"\n"}
+          let no man put asunder."
+        </p>
+        <p className="lum-quote-ref">— Mark 9:10</p>
+
+        <div className="lum-line" />
+
+        <p className="lum-body lum-body--art">It is with the greatest pleasure that the</p>
+
+        <div className="lum-families">
+          <span className="lum-family-name">Charles Nassrany Family</span>
+          <span className="lum-ampersand">&amp;</span>
+          <span className="lum-family-name">Georges Mawass Family</span>
+        </div>
+
+        <p className="lum-body lum-body--art">
+          cordially invite you to celebrate{"\n"}the wedding of their son and daughter
+        </p>
       </div>
     </div>
   );

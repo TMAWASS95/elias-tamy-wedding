@@ -5,41 +5,79 @@ interface GiftRegistryScreenProps {
   onContinue: () => void;
 }
 
-export default function GiftRegistryScreen({ onContinue: _onContinue }: GiftRegistryScreenProps) {
+function GiftIcon() {
+  return (
+    <svg className="evt-icon-svg" viewBox="0 0 44 58" fill="none" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="7" y="22" width="30" height="26" rx="1" />
+      <line x1="5" y1="22" x2="39" y2="22" />
+      <line x1="22" y1="22" x2="22" y2="48" />
+      <path d="M22 22 C22 14 16 12 13 15 C10 18 14 22 22 22 Z" />
+      <path d="M22 22 C22 14 28 12 31 15 C34 18 30 22 22 22 Z" />
+    </svg>
+  );
+}
+
+function CopyRow({ label, value }: { label: string; value: string }) {
   const [copied, setCopied] = useState(false);
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(wedding.giftRegistry.id).then(() => {
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(value);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+      setTimeout(() => setCopied(false), 1600);
+    } catch { /* clipboard unavailable */ }
   };
+
+  return (
+    <div className="gift-row">
+      <div className="gift-row-details">
+        <span className="gift-row-label">{label}</span>
+        <span className="gift-row-value">{value}</span>
+      </div>
+      <button
+        type="button"
+        className="gift-copy-btn"
+        onClick={copy}
+        aria-label={`Copy ${label}`}
+      >
+        {copied ? "Copied" : "Copy"}
+      </button>
+    </div>
+  );
+}
+
+export default function GiftRegistryScreen({ onContinue: _onContinue }: GiftRegistryScreenProps) {
+  const { note, accountLabel, accountHolder, accountNumber } = wedding.giftRegistry;
 
   return (
     <div className="cover-screen">
       <div className="cover-overlay lum-overlay" />
 
-      <div className="lum-content lum-content--center">
+      <div className="evt-content">
         <div className="lum-section-header">
           <div className="lum-line" />
           <span className="lum-section-title">Gift Registry</span>
           <div className="lum-line" />
         </div>
 
-        <p className="lum-body" style={{ maxWidth: 280, textAlign: "center" }}>
-          Your presence at our wedding is the greatest gift of all.
+        <p className="lum-body lum-body--muted" style={{ marginBottom: 4 }}>
+          {note}
         </p>
 
-        <p className="lum-body lum-body--muted" style={{ marginTop: 4 }}>
-          For those who wish, a registry is available on Wishlist
-        </p>
+        <div className="glass-card">
+          <div className="evt-row">
+            <div className="evt-row-icon"><GiftIcon /></div>
+            <div className="evt-row-details">
+              <span className="evt-row-name">{accountLabel}</span>
+              <span className="evt-row-sub">{accountHolder}</span>
+            </div>
+          </div>
 
-        <div className="gr-id-block">
-          <span className="gr-id-label">Registry ID</span>
-          <span className="gr-id-value">{wedding.giftRegistry.id}</span>
-          <button className="gr-copy-btn" onClick={handleCopy}>
-            {copied ? "Copied ✓" : "Copy ID"}
-          </button>
+          <div className="evt-divider" style={{ margin: "16px 0" }} />
+
+          <div className="gift-rows">
+            <CopyRow label="Account Number" value={accountNumber} />
+          </div>
         </div>
       </div>
     </div>

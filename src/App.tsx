@@ -1,12 +1,14 @@
 import { useRef, useEffect, useState } from "react";
 import { Routes, Route, useParams } from "react-router-dom";
+import CoverHero from "./components/CoverHero";
 import Cover from "./components/Cover";
-import Invitation2 from "./components/Invitation2";
 import EventScreen from "./components/EventScreen";
 import CountdownScreen from "./components/CountdownScreen";
+import GiftRegistryScreen from "./components/GiftRegistryScreen";
 import RSVPScreen from "./components/RSVPScreen";
 import AdminDashboard from "./components/AdminDashboard";
-import { guests, weddingEvents, type GuestEntry } from "./data";
+import ETRoute from "./components/ETRoute";
+import { guests, weddingEvents, formatGuestName, type GuestEntry } from "./data";
 
 declare global {
   interface Window {
@@ -18,14 +20,14 @@ declare global {
 const YT_VIDEO_ID = "zcdMC_VScUE";
 
 const SECTION_IMAGES: (string | null)[] = [
-  import.meta.env.BASE_URL + "img2.jpg",        // Cover
-  import.meta.env.BASE_URL + "img2.jpg",        // Invitation2
-  import.meta.env.BASE_URL + "DAS 2148.jpg",    // At My House
+  import.meta.env.BASE_URL + "img2.jpg",        // Hero (ET + date)
+  import.meta.env.BASE_URL + "DAS couple.jpg",  // Cover (intro)
+  import.meta.env.BASE_URL + "DAS 2148.jpg",    // Getting Ready
   import.meta.env.BASE_URL + "DAS 2168.jpg",    // Ceremony
-  import.meta.env.BASE_URL + "DAS 2174.jpg",    // Welcome Drink
   import.meta.env.BASE_URL + "DAS 2180.jpg",    // Dinner
-  import.meta.env.BASE_URL + "DAS couple.jpg",  // Countdown
-  import.meta.env.BASE_URL + "img2.jpg",        // RSVP
+  import.meta.env.BASE_URL + "DAS 2270.jpg",    // Countdown
+  import.meta.env.BASE_URL + "couple.png",      // Gift Registry
+  import.meta.env.BASE_URL + "DAS 2268.jpg",    // RSVP
 ];
 
 function Wedding({ guest, slug }: { guest: GuestEntry | null; slug?: string }) {
@@ -102,15 +104,15 @@ function Wedding({ guest, slug }: { guest: GuestEntry | null; slug?: string }) {
   };
 
   const screens = [
-    <Cover           onStart={()    => scrollTo(1)} />,
-    <Invitation2     onContinue={() => scrollTo(2)} />,
+    <CoverHero       onStart={()    => scrollTo(1)} />,
+    <Cover           onStart={()    => scrollTo(2)} />,
     <EventScreen     onContinue={() => scrollTo(3)} event={weddingEvents[0]} />,
     <EventScreen     onContinue={() => scrollTo(4)} event={weddingEvents[1]} />,
     <EventScreen     onContinue={() => scrollTo(5)} event={weddingEvents[2]} />,
-    <EventScreen     onContinue={() => scrollTo(6)} event={weddingEvents[3]} />,
-    <CountdownScreen onContinue={() => scrollTo(7)} />,
+    <CountdownScreen onContinue={() => scrollTo(6)} />,
+    <GiftRegistryScreen onContinue={() => scrollTo(7)} />,
     <RSVPScreen      onContinue={() => {}}
-                     guestName={guest?.name}
+                     guestName={guest ? formatGuestName(guest) : undefined}
                      maxGuests={guest?.maxGuests}
                      slug={slug} />,
   ];
@@ -194,6 +196,7 @@ export default function App() {
     <Routes>
       <Route path="/"        element={null} />
       <Route path="/admin"   element={<AdminDashboard />} />
+      <Route path="/et"      element={<ETRoute />} />
       <Route path="/:slug"   element={<GuestRoute />} />
     </Routes>
   );

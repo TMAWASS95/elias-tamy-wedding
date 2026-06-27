@@ -1,7 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "WebSearch",
+      "WebFetch(domain:www.alyasavillage.com)",
+      "Bash(curl -sL --max-time 30 \"https://www.alyasavillage.com/\")",
+      "Bash(curl -sL --max-time 30 \"https://www.alyasavillage.com/\" -o /tmp/alyasa.html)",
+      "Read(//tmp/**)"
     ]
   }
 }

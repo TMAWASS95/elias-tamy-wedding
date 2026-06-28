@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useLayoutEffect, useState } from "react";
 import { Routes, Route, useParams } from "react-router-dom";
 import CoverHero from "./components/CoverHero";
 import Cover from "./components/Cover";
@@ -8,6 +8,7 @@ import GiftRegistryScreen from "./components/GiftRegistryScreen";
 import RSVPScreen from "./components/RSVPScreen";
 import AdminDashboard from "./components/AdminDashboard";
 import ETRoute from "./components/ETRoute";
+import LanguageToggle from "./components/LanguageToggle";
 import { guests, weddingEvents, formatGuestName, type GuestEntry } from "./data";
 
 declare global {
@@ -40,6 +41,20 @@ function Wedding({ guest, slug }: { guest: GuestEntry | null; slug?: string }) {
   const scrollTo = (i: number) => {
     sectionRefs.current[i]?.scrollIntoView({ behavior: "smooth" });
   };
+
+  // Lock the window scroll while the full-screen snap experience is mounted,
+  // so the page never shows a second (body) scrollbar alongside the snap one.
+  useLayoutEffect(() => {
+    const html = document.documentElement;
+    const prevHtml = html.style.overflow;
+    const prevBody = document.body.style.overflow;
+    html.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+    return () => {
+      html.style.overflow = prevHtml;
+      document.body.style.overflow = prevBody;
+    };
+  }, []);
 
   // YouTube IFrame API
   useEffect(() => {
@@ -115,10 +130,12 @@ function Wedding({ guest, slug }: { guest: GuestEntry | null; slug?: string }) {
                      guestName={guest ? formatGuestName(guest) : undefined}
                      maxGuests={guest?.maxGuests}
                      slug={slug} />,
-  ];
-
+  ]; 
   return (
     <div style={{ height: "100dvh", overflow: "hidden", background: "#0d0605" }}>
+
+      {/* Language toggle (top corner) */}
+      {/* <LanguageToggle /> */}
 
       {/* Persistent music button */}
       <button className="music-btn" onClick={toggleMusic} aria-label="Toggle music">

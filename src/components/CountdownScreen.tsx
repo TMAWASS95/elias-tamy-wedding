@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { wedding } from "../data";
+import { useLang } from "../i18n";
 
 interface CountdownScreenProps {
   onContinue: () => void;
@@ -18,6 +19,7 @@ function getTimeLeft() {
 
 export default function CountdownScreen({ onContinue: _onContinue }: CountdownScreenProps) {
   const [time, setTime] = useState(getTimeLeft);
+  const { t } = useLang();
 
   useEffect(() => {
     const id = setInterval(() => setTime(getTimeLeft()), 1000);
@@ -25,10 +27,10 @@ export default function CountdownScreen({ onContinue: _onContinue }: CountdownSc
   }, []);
 
   const units = [
-    { value: time.days,    label: "Days" },
-    { value: time.hours,   label: "Hours" },
-    { value: time.minutes, label: "Minutes" },
-    { value: time.seconds, label: "Seconds" },
+    { value: time.days,    label: t("countdown.days") },
+    { value: time.hours,   label: t("countdown.hours") },
+    { value: time.minutes, label: t("countdown.minutes") },
+    { value: time.seconds, label: t("countdown.seconds") },
   ];
 
   return (
@@ -38,7 +40,7 @@ export default function CountdownScreen({ onContinue: _onContinue }: CountdownSc
       <div className="lum-content lum-content--center">
         <div className="lum-section-header">
           <div className="lum-line" />
-          <span className="lum-section-title">Counting Down</span>
+          <span className="lum-section-title">{t("countdown.title")}</span>
           <div className="lum-line" />
         </div>
 

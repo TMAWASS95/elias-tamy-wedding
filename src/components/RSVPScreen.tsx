@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { collection, doc, getDoc, setDoc, addDoc, Timestamp } from "firebase/firestore";
 import { db, RSVPS_COLLECTION } from "../lib/firebase";
+import { useLang } from "../i18n";
 
 interface RSVPScreenProps {
   onContinue: () => void;
@@ -49,6 +50,7 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
   const [submission, setSubmission] = useState<"new" | "existing" | null>(null);
   const [checking, setChecking] = useState(!!(slug && db));
   const [error, setError]       = useState<string | null>(null);
+  const { t } = useLang();
 
   useEffect(() => {
     if (!slug || !db) return;
@@ -70,7 +72,7 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
     setError(null);
     if (submission !== null) return;
     if (!db) {
-      setError("RSVP saving is not set up yet. Please contact the couple.");
+      setError(t("rsvp.errorNoDb"));
       return;
     }
 
@@ -89,7 +91,7 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
         await addDoc(collection(db, RSVPS_COLLECTION), rsvpData);
       }
     } catch (err: any) {
-      setError("Something went wrong. Please try again.");
+      setError(t("rsvp.errorGeneric"));
       return;
     }
 
@@ -104,34 +106,37 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
       <div className="rsvp-screen-content">
         <div className="lum-section-header">
           <div className="lum-line" />
-          <span className="lum-section-title">RSVP</span>
+          <span className="lum-section-title">{t("rsvp.title")}</span>
           <div className="lum-line" />
         </div>
 
         {submission === null && (
-          <p className="rsvp-deadline">Kindly confirm your attendance before August 10, 2026</p>
+          <p className="rsvp-deadline">
+            <span className="rsvp-deadline-label">{t("rsvp.deadlineLabel")}</span>
+            <span className="rsvp-deadline-date">{t("rsvp.date")}</span>
+          </p>
         )}
 
         {checking ? (
-          <p className="rsvp-thanks">Loading…</p>
+          <p className="rsvp-thanks">{t("rsvp.loading")}</p>
         ) : submission !== null ? (
           <p className="rsvp-thanks">
             {submission === "existing"
-              ? "Thanks! Your RSVP is already recorded."
-              : "Thank you! We can't wait to celebrate with you."}
+              ? t("rsvp.thanksExisting")
+              : t("rsvp.thanksNew")}
           </p>
         ) : (
           <form className="rsvp-screen-form" onSubmit={handleSubmit}>
 
             {/* Name */}
             <div className="rsvp-field">
-              <span className="rsvp-field-label">Your Name</span>
+              <span className="rsvp-field-label">{t("rsvp.yourName")}</span>
               {guestName ? (
                 <p className="rsvp-name-display">{name}</p>
               ) : (
                 <input
                   className="rsvp-input"
-                  placeholder="Full name"
+                  placeholder={t("rsvp.fullName")}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
@@ -142,21 +147,21 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
 
             {/* Attendance pills */}
             <div className="rsvp-field">
-              <span className="rsvp-field-label">Will you attend?</span>
+              <span className="rsvp-field-label">{t("rsvp.willAttend")}</span>
               <div className="rsvp-pill-group">
                 <button
                   type="button"
                   className={`rsvp-pill${rsvp === "yes" ? " rsvp-pill--active" : ""}`}
                   onClick={() => setRsvp("yes")}
                 >
-                  Joyfully accepts
+                  {t("rsvp.accepts")}
                 </button>
                 <button
                   type="button"
                   className={`rsvp-pill${rsvp === "no" ? " rsvp-pill--active rsvp-pill--decline" : ""}`}
                   onClick={() => setRsvp("no")}
                 >
-                  Regretfully declines
+                  {t("rsvp.declines")}
                 </button>
               </div>
             </div>
@@ -164,7 +169,7 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
             {/* Guest stepper — only shown when attending */}
             {rsvp === "yes" && (
               <div className="rsvp-field">
-                <span className="rsvp-field-label">Attending</span>
+                <span className="rsvp-field-label">{t("rsvp.attending")}</span>
                 <GuestStepper
                   value={guests}
                   onChange={setGuests}
@@ -176,15 +181,15 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
             {error && <p className="rsvp-error">{error}</p>}
 
             <p className="rsvp-contact-note">
-              Kindly confirm your presence by clicking the button below.
+              {t("rsvp.confirmNote")}
             </p>
 
             <button className="rsvp-submit-btn" type="submit">
-              Confirm RSVP
+              {t("rsvp.confirm")}
             </button>
 
             <p className="rsvp-contact-note">
-              Or send your response to one of the numbers below.
+              {t("rsvp.orSend")}
             </p>
 
             <div className="rsvp-contacts">
@@ -194,7 +199,7 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <span className="rsvp-contact-label">Groom</span>
+                <span className="rsvp-contact-label">{t("rsvp.groom")}</span>
                 <span className="rsvp-contact-num">70 212 399</span>
               </a>
               <a
@@ -203,7 +208,7 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <span className="rsvp-contact-label">Bride</span>
+                <span className="rsvp-contact-label">{t("rsvp.bride")}</span>
                 <span className="rsvp-contact-num">76 795 349</span>
               </a>
             </div>

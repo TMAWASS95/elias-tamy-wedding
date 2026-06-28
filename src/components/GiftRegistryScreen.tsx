@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { wedding } from "../data";
+import { useLang } from "../i18n";
 
 interface GiftRegistryScreenProps {
   onContinue: () => void;
@@ -19,6 +20,7 @@ function GiftIcon() {
 
 function CopyRow({ label, value }: { label: string; value: string }) {
   const [copied, setCopied] = useState(false);
+  const { t } = useLang();
 
   const copy = async () => {
     try {
@@ -40,14 +42,15 @@ function CopyRow({ label, value }: { label: string; value: string }) {
         onClick={copy}
         aria-label={`Copy ${label}`}
       >
-        {copied ? "Copied" : "Copy"}
+        {copied ? t("gift.copied") : t("gift.copy")}
       </button>
     </div>
   );
 }
 
 export default function GiftRegistryScreen({ onContinue: _onContinue }: GiftRegistryScreenProps) {
-  const { note, accountLabel, accountHolder, accountNumber } = wedding.giftRegistry;
+  const { accountNumber } = wedding.giftRegistry;
+  const { t } = useLang();
 
   return (
     <div className="cover-screen">
@@ -56,27 +59,27 @@ export default function GiftRegistryScreen({ onContinue: _onContinue }: GiftRegi
       <div className="evt-content">
         <div className="lum-section-header">
           <div className="lum-line" />
-          <span className="lum-section-title">Gift Registry</span>
+          <span className="lum-section-title">{t("gift.title")}</span>
           <div className="lum-line" />
         </div>
 
         <p className="lum-body lum-body--muted" style={{ marginBottom: 4 }}>
-          {note}
+          {t("gift.note")}
         </p>
 
         <div className="glass-card">
           <div className="evt-row">
             <div className="evt-row-icon"><GiftIcon /></div>
             <div className="evt-row-details">
-              <span className="evt-row-name">{accountLabel}</span>
-              <span className="evt-row-sub">{accountHolder}</span>
+              <span className="evt-row-name">{t("gift.accountLabel")}</span>
+              <span className="evt-row-sub">{t("gift.accountHolder")}</span>
             </div>
           </div>
 
           <div className="evt-divider" style={{ margin: "16px 0" }} />
 
           <div className="gift-rows">
-            <CopyRow label="Account Number" value={accountNumber} />
+            <CopyRow label={t("gift.accountNumberLabel")} value={accountNumber} />
           </div>
         </div>
       </div>

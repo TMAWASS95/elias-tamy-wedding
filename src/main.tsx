@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
+import { LangProvider } from './i18n'
 import './styles.css'
 
 // GitHub Pages SPA redirect: restore path saved by 404.html before React Router initializes.
@@ -14,7 +15,9 @@ if (redirectPath) {
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <LangProvider>
+        <App />
+      </LangProvider>
     </BrowserRouter>
   </React.StrictMode>
 )

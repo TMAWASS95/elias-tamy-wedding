@@ -1,4 +1,5 @@
 import { wedding } from "../data";
+import { useLang } from "../i18n";
 
 interface CoverProps {
   onStart: () => void;
@@ -6,6 +7,7 @@ interface CoverProps {
 
 export default function Cover({ onStart }: CoverProps) {
   const { groom, bride } = wedding;
+  const { t } = useLang();
 
   return (
     <div className="cover-screen intro-screen" onClick={onStart} style={{ cursor: "pointer" }}>
@@ -19,28 +21,21 @@ export default function Cover({ onStart }: CoverProps) {
           <span className="cover-init-letter">{bride[0]}</span>
         </div>
 
-        <div className="lum-line" />
-
-        {/* Invitation quote */}
-        <p className="lum-quote">
-          "For what God has joined together,{"\n"}
-          let no man put asunder."
-        </p>
-        <p className="lum-quote-ref">— Mark 9:10</p>
-
-        <div className="lum-line" />
-
-        <p className="lum-body lum-body--art">It is with the greatest pleasure that the</p>
+        <p className="lum-body lum-body--art">{t("cover.intro1")}</p>
 
         <div className="lum-families">
-          <span className="lum-family-name">Charles Nasrany Family</span>
+          <span className="lum-family-name">{t("cover.family1")}</span>
           <span className="lum-ampersand">&amp;</span>
-          <span className="lum-family-name">Georges Mawass Family</span>
+          <span className="lum-family-name">{t("cover.family2")}</span>
         </div>
 
-        <p className="lum-body lum-body--art">
-          cordially invite you to celebrate{"\n"}the wedding of their son and daughter
-        </p>
+        <p className="lum-body lum-body--art" style={{ whiteSpace: "pre-line" }}>{t("cover.intro2")}</p>
+
+        <div className="intro-couple-names">
+          <span className="intro-couple-name">{groom}</span>
+          <span className="intro-couple-amp">&amp;</span>
+          <span className="intro-couple-name">{bride}</span>
+        </div>
       </div>
     </div>
   );

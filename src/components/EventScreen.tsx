@@ -1,5 +1,6 @@
 import type { JSX } from "react";
 import type { WeddingEvent } from "../data";
+import { useLang, localizeEvent } from "../i18n";
 
 interface EventScreenProps {
   onContinue: () => void;
@@ -83,7 +84,9 @@ const iconMap: Record<string, JSX.Element> = {
   arch:    <ArchIcon />,
 };
 
-export default function EventScreen({ onContinue: _onContinue, event }: EventScreenProps) {
+export default function EventScreen({ onContinue: _onContinue, event: rawEvent }: EventScreenProps) {
+  const { t, lang } = useLang();
+  const event = localizeEvent(rawEvent, lang);
   return (
     <div className="cover-screen">
       <div className="cover-overlay lum-overlay" />
@@ -117,7 +120,7 @@ export default function EventScreen({ onContinue: _onContinue, event }: EventScr
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        <MapPinIcon /> Get Directions
+                        <MapPinIcon /> {t("common.getDirections")}
                       </a>
                     )}
                   </div>
@@ -139,7 +142,7 @@ export default function EventScreen({ onContinue: _onContinue, event }: EventScr
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <MapPinIcon /> Get Directions
+                    <MapPinIcon /> {t("common.getDirections")}
                   </a>
                 )}
               </div>

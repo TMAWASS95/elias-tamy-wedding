@@ -100,6 +100,8 @@ body {
   display: flex;
   align-items: center;
   gap: clamp(16px, 5vw, 32px);
+  /* Keep initials left-to-right even in RTL */
+  direction: ltr;
 }
 
 .cover-init-letter {
@@ -202,13 +204,19 @@ body {
 .hero-monogram {
   font-family: "Cormorant Garamond", serif;
   font-weight: 200;
-  font-size: clamp(96px, 30vw, 220px);
+  font-size: 30px;
   letter-spacing: 0.12em;
   color: #fff;
   line-height: 1;
   text-shadow: 0 2px 24px rgba(0, 0, 0, 0.45);
   /* offset the trailing letter-spacing so the pair stays centered */
   text-indent: 0.12em;
+  /* Keep the monogram left-to-right even in RTL */
+  direction: ltr;
+}
+
+.hero-amp {
+  font-family: "Mr De Haviland", cursive;
 }
 
 .hero-date {
@@ -235,24 +243,20 @@ body {
   gap: clamp(8px, 0.9vh, 16px);
   width: 100%;
   max-width: 480px;
-  max-height: 100dvh;
-  /* Generous top padding keeps the couple photo visible above the text;
-     small bottom padding keeps the text pinned low in the section */
-  padding: clamp(180px, 33vh, 360px) 32px clamp(34px, 5vh, 48px);
-  overflow-y: auto;
+  /* Top padding keeps the couple photo visible above the text;
+     small bottom padding keeps the text pinned low in the section.
+     No inner scroll — the snap container is the only scroller. */
+  padding: clamp(40px, 8vh, 90px) 32px clamp(28px, 4vh, 44px);
+  overflow: visible;
   text-align: center;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.intro-content::-webkit-scrollbar {
-  display: none;
 }
 
 .intro-monogram {
   display: flex;
   align-items: center;
   gap: clamp(14px, 4.5vw, 28px);
+  /* Keep the monogram as E ♥ T even in RTL (groom's letter on the left) */
+  direction: ltr;
 }
 
 .intro-monogram .cover-init-letter {
@@ -302,20 +306,65 @@ body {
   letter-spacing: 0.02em;
   text-transform: none;
   color: rgba(255, 255, 255, 0.92);
+  font-size: 20px;
 }
 
 /* Stack the two families with the ampersand centered between them */
+/* Two families shown side by side — left section + right section,
+   split by a thin vertical divider. */
 .intro-content .lum-families {
-  flex-direction: column;
+  flex-direction: row;
   flex-wrap: nowrap;
-  gap: clamp(2px, 1vh, 8px);
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 4vw, 22px);
+  width: 100%;
+}
+
+.intro-content .lum-family-name {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+  font-size: clamp(15px, 4.4vw, 21px);
+  line-height: 1.3;
 }
 
 .intro-content .lum-ampersand {
-  font-family: "Times New Roman", Times, serif;
-  font-style: normal;
-  font-size: clamp(26px, 7vw, 40px);
-  color: rgba(212, 164, 76, 0.9);
+  flex: 0 0 auto;
+  align-self: stretch;
+  width: 1px;
+  min-height: 42px;
+  font-size: 0; /* hide the "&" glyph; use the divider line */
+  background: rgba(255, 255, 255, 0.32);
+  margin: 2px 0;
+}
+
+/* Couple names — same serif as the first-section monogram.
+   Elias on the left, Tamy on the right, even in RTL. */
+.intro-couple-names {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: clamp(10px, 3vw, 18px);
+  direction: ltr;
+  margin-top: clamp(4px, 1vh, 10px);
+}
+
+.intro-couple-name {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 300;
+  font-size: clamp(30px, 9vw, 52px);
+  color: #fff;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+}
+
+.intro-couple-amp {
+  font-family: "Mr De Haviland", cursive;
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(20px, 5vw, 32px);
+  color: white;
   line-height: 1;
 }
 
@@ -416,15 +465,16 @@ body {
 .lum-family-name {
   font-family: "Times New Roman", Times, serif;
   font-size: clamp(24px, 6vw, 38px);
-  color: rgba(212, 164, 76, 0.7);
+  color: white;
   line-height: 1.2;
 }
 
 .lum-ampersand {
-  font-family: "Times New Roman", Times, serif;
+  font-family: "Mr De Haviland", cursive;
   font-size: clamp(18px, 4.5vw, 26px);
-  color: rgba(212, 164, 76, 0.7);
+  color: white;
   font-style: italic;
+  font-size: 12px;
 }
 
 .lum-couple-name {
@@ -851,11 +901,11 @@ body {
 }
 
 .evt-row-label {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Cinzel";
   font-size: 9px;
   letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(212, 164, 76, 0.85);
+  /* text-transform: uppercase; */
+  color: white;
   margin-bottom: 3px;
 }
 
@@ -866,7 +916,7 @@ body {
 
 .evt-row-sub {
   font-family: "Cormorant Garamond", serif;
-  font-size: 11px;
+  font-size: 18px;
   letter-spacing: 0.04em;
   color: rgba(255, 255, 255, 0.78);
 }
@@ -1070,7 +1120,7 @@ body {
 }
 
 .gift-row-value {
-  font-family: "Cormorant Garamond", serif;
+  font-family: "Montserrat", serif;
   font-size: 17px;
   font-weight: 600;
   letter-spacing: 0.03em;
@@ -1405,14 +1455,34 @@ body {
 }
 
 .rsvp-deadline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: center;
+  margin: 0 auto 22px;
+  padding: 7px 16px;
+  border: 1px solid rgba(212, 164, 76, 0.35);
+  border-radius: 999px;
+  background: rgba(212, 164, 76, 0.08);
+}
+
+.rsvp-deadline-label {
   font-family: "Montserrat", sans-serif;
   font-size: 11px;
   font-weight: 400;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(212, 164, 76, 0.95);
-  text-align: center;
-  margin: 0 0 16px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.rsvp-deadline-date {
+  font-family: "Montserrat", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(212, 164, 76, 0.98);
+  white-space: nowrap;
 }
 
 .rsvp-contact-note {
@@ -1944,7 +2014,6 @@ body {
 .glass-card {
   background: rgba(255, 255, 255, 0.065);
   backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.13);
   border-radius: 18px;
   padding: 20px 22px;
@@ -2048,4 +2117,87 @@ body {
 /* ─── RSVP trigger open state ────────────────────────── */
 .rsvp-custom-trigger.open {
   border-bottom-color: rgba(212, 164, 76, 0.65);
+}
+
+/* ─── Language toggle (top corner) ───────────────────── */
+.lang-toggle {
+  position: fixed;
+  top: calc(12px + env(safe-area-inset-top));
+  inset-inline-end: calc(12px + env(safe-area-inset-right));
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 164, 76, 0.42);
+  border-radius: 999px;
+  min-width: 44px;
+  height: 36px;
+  padding: 0 14px;
+  cursor: pointer;
+  color: #d4a44c;
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.lang-toggle:hover {
+  background: rgba(0, 0, 0, 0.55);
+  border-color: rgba(212, 164, 76, 0.75);
+}
+
+/* ─── Arabic / RTL typography ────────────────────────── */
+html[dir="rtl"] body {
+  font-family: "Cairo", sans-serif;
+}
+
+/* Elegant serif elements → Amiri */
+html[dir="rtl"] .lum-quote,
+html[dir="rtl"] .lum-quote-ref,
+html[dir="rtl"] .lum-family-name,
+html[dir="rtl"] .lum-ampersand,
+html[dir="rtl"] .lum-body,
+html[dir="rtl"] .rsvp-thanks,
+html[dir="rtl"] .rsvp-name-display {
+  font-family: "Amiri", serif;
+}
+
+/* Label / UI elements → Cairo; drop Latin letter-spacing (it breaks
+   Arabic cursive joining) and uppercase (Arabic has no case). */
+html[dir="rtl"] .lum-section-title,
+html[dir="rtl"] .hero-date,
+html[dir="rtl"] .cd-label,
+html[dir="rtl"] .cd-number,
+html[dir="rtl"] .rsvp-field-label,
+html[dir="rtl"] .rsvp-deadline-label,
+html[dir="rtl"] .rsvp-deadline-date,
+html[dir="rtl"] .evt-row-label,
+html[dir="rtl"] .evt-row-name,
+html[dir="rtl"] .evt-row-sub,
+html[dir="rtl"] .evt-directions,
+html[dir="rtl"] .gift-row-label,
+html[dir="rtl"] .gift-row-value,
+html[dir="rtl"] .gift-copy-btn,
+html[dir="rtl"] .rsvp-pill,
+html[dir="rtl"] .rsvp-submit-btn,
+html[dir="rtl"] .rsvp-contact-note,
+html[dir="rtl"] .rsvp-contact-label,
+html[dir="rtl"] .rsvp-input,
+html[dir="rtl"] .lang-toggle {
+  font-family: "Cairo", sans-serif;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+/* Phone numbers stay left-to-right even in RTL */
+html[dir="rtl"] .rsvp-contact-num {
+  direction: ltr;
+  unicode-bidi: embed;
 }

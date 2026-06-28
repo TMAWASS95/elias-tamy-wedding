@@ -13,9 +13,9 @@ export default function ETRoute() {
       <div style={{ textAlign: "center" }}>
         <div
           style={{
-            fontFamily: "'Times New Roman', Times, serif",
+            fontFamily: "'Cormorant Garamond', serif",
             fontSize: "clamp(72px, 16vw, 200px)",
-            fontWeight: 400,
+            fontWeight: 300,
             color: "#fff",
             letterSpacing: "0.02em",
             lineHeight: 1,
@@ -26,19 +26,16 @@ export default function ETRoute() {
         <div
           style={{
             marginTop: "12px",
-            fontFamily: "'Times New Roman', Times, serif",
+            fontFamily: "'Cormorant Garamond', serif",
             fontSize: "clamp(28px, 6vw, 64px)",
-            fontWeight: 400,
+            fontWeight: 300,
             color: "rgba(255,255,255,0.9)",
             letterSpacing: "0.04em",
             lineHeight: 1,
             whiteSpace: "nowrap",
           }}
         >
-          <span style={{ display: "inline-block", verticalAlign: "baseline" }}>Elias </span>
-          <span style={{ display: "inline-block", verticalAlign: "baseline" }}>
-            &nbsp;&amp; Tamy
-          </span>
+          Elias <span className="hero-amp">&amp;</span> Tamy
         </div>
       </div>
     </div>

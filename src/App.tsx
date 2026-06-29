@@ -3,9 +3,9 @@ import { Routes, Route, useParams } from "react-router-dom";
 import CoverHero from "./components/CoverHero";
 import Cover from "./components/Cover";
 import EventScreen from "./components/EventScreen";
-import CountdownScreen from "./components/CountdownScreen";
 import GiftRegistryScreen from "./components/GiftRegistryScreen";
 import RSVPScreen from "./components/RSVPScreen";
+// CountdownScreen removed — section no longer shown.
 import AdminDashboard from "./components/AdminDashboard";
 import ETRoute from "./components/ETRoute";
 import LanguageToggle from "./components/LanguageToggle";
@@ -26,9 +26,8 @@ const SECTION_IMAGES: (string | null)[] = [
   import.meta.env.BASE_URL + "DAS 2148.jpg",    // Getting Ready
   import.meta.env.BASE_URL + "DAS 2168.jpg",    // Ceremony
   import.meta.env.BASE_URL + "DAS 2180.jpg",    // Dinner
-  import.meta.env.BASE_URL + "DAS 2270.jpg",    // Countdown
-  import.meta.env.BASE_URL + "couple.png",      // Gift Registry
-  import.meta.env.BASE_URL + "DAS 2268.jpg",    // RSVP
+  import.meta.env.BASE_URL + "DAS 2270.jpg",    // Gift Registry (was Countdown's image)
+  import.meta.env.BASE_URL + "couple.png",      // RSVP (was Gift Registry's image)
 ];
 
 function Wedding({ guest, slug }: { guest: GuestEntry | null; slug?: string }) {
@@ -124,18 +123,17 @@ function Wedding({ guest, slug }: { guest: GuestEntry | null; slug?: string }) {
     <EventScreen     onContinue={() => scrollTo(3)} event={weddingEvents[0]} />,
     <EventScreen     onContinue={() => scrollTo(4)} event={weddingEvents[1]} />,
     <EventScreen     onContinue={() => scrollTo(5)} event={weddingEvents[2]} />,
-    <CountdownScreen onContinue={() => scrollTo(6)} />,
-    <GiftRegistryScreen onContinue={() => scrollTo(7)} />,
+    <GiftRegistryScreen onContinue={() => scrollTo(6)} />,
     <RSVPScreen      onContinue={() => {}}
                      guestName={guest ? formatGuestName(guest) : undefined}
                      maxGuests={guest?.maxGuests}
                      slug={slug} />,
-  ]; 
+  ];
   return (
     <div style={{ height: "100dvh", overflow: "hidden", background: "#0d0605" }}>
 
       {/* Language toggle (top corner) */}
-      {/* <LanguageToggle /> */}
+      <LanguageToggle />
 
       {/* Persistent music button */}
       <button className="music-btn" onClick={toggleMusic} aria-label="Toggle music">

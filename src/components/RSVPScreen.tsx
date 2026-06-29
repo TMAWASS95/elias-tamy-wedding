@@ -100,7 +100,7 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
   };
 
   return (
-    <div className="cover-screen">
+    <div className="cover-screen rsvp-screen">
       <div className="cover-overlay lum-overlay rsvp-overlay" />
 
       <div className="rsvp-screen-content">

@@ -50,8 +50,8 @@ export const weddingEvents: WeddingEvent[] = [
     icon: "arch",
     description: "The groom and bride will each welcome guests at their place before the ceremony — feel free to join us early.",
     parties: [
-      { label: "Groom welcomes you at", name: "Alyasa Village", sub: "The Villa", time: "from 4:30 PM", mapUrl: "https://maps.google.com/?q=5Q5P%2B3M+Saqi+Rechmaiya" },
-      { label: "Bride welcomes you at", name: "Alyasa Village", sub: "The Idle Lounge", time: "from 4:30 PM", mapUrl: "https://maps.google.com/?q=5Q5P%2B3M+Saqi+Rechmaiya" },
+      { label: "Groom welcomes you at", name: "Alyasa Village", sub: "The Villa", time: "from 4:00 PM", mapUrl: "https://maps.google.com/?q=5Q5P%2B3M+Saqi+Rechmaiya" },
+      { label: "Bride welcomes you at", name: "Alyasa Village", sub: "The Idle Lounge", time: "from 4:00 PM", mapUrl: "https://maps.google.com/?q=5Q5P%2B3M+Saqi+Rechmaiya" },
     ],
   },
   {

@@ -26,9 +26,9 @@ export default function ETRoute() {
         <div
           style={{
             marginTop: "12px",
-            fontFamily: "'Cormorant Garamond', serif",
+            fontFamily: "var(--couple-font)",
             fontSize: "clamp(28px, 6vw, 64px)",
-            fontWeight: 300,
+            fontWeight: 400,
             color: "rgba(255,255,255,0.9)",
             letterSpacing: "0.04em",
             lineHeight: 1,

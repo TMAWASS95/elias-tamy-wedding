@@ -112,7 +112,7 @@ export default function EventScreen({ onContinue: _onContinue, event: rawEvent }
                     <span className="evt-row-label">{party.label}</span>
                     <span className="evt-row-name">{party.name}</span>
                     {party.sub  && <span className="evt-row-sub">{party.sub}</span>}
-                    {party.time && <span className="evt-row-sub">{party.time}</span>}
+                    {party.time && <span className="evt-row-sub evt-row-time">{party.time}</span>}
                     {party.mapUrl && (
                       <a
                         className="evt-directions"
@@ -133,7 +133,7 @@ export default function EventScreen({ onContinue: _onContinue, event: rawEvent }
               <div className="evt-row-details">
                 <span className="evt-row-name">{event.name}</span>
                 {event.sub     && <span className="evt-row-sub">{event.sub}</span>}
-                {event.time    && <span className="evt-row-sub">{event.time}</span>}
+                {event.time    && <span className="evt-row-sub evt-row-time">{event.time}</span>}
                 {event.address && <span className="evt-row-sub">{event.address}</span>}
                 {event.mapUrl  && (
                   <a

@@ -72,7 +72,7 @@ export default function GiftRegistryScreen({ onContinue: _onContinue }: GiftRegi
             <div className="evt-row-icon"><GiftIcon /></div>
             <div className="evt-row-details">
               <span className="evt-row-name">{t("gift.accountLabel")}</span>
-              <span className="evt-row-sub">{t("gift.accountHolder")}</span>
+              <span className="evt-row-sub couple-name">{t("gift.accountHolder")}</span>
             </div>
           </div>
 

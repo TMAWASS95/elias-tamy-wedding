@@ -210,7 +210,7 @@ body {
 }
 
 .hero-monogram {
-  font-family: var(--couple-font);
+  font-family: "Cormorant Garamond", serif;
   font-weight: 400;
   font-size: 30px;
   letter-spacing: 0.12em;
@@ -225,18 +225,17 @@ body {
 
 .hero-amp {
   font-family: "Mr De Haviland", cursive;
-  font-style: normal;
+  font-style: italic;
   font-weight: 400;
-  font-size: 1.6em;
+  font-size: 20px;
   letter-spacing: normal;
   text-indent: 0;
-  vertical-align: middle;
   margin: 0 clamp(4px, 1.5vw, 10px);
 }
 
 .hero-date {
-  font-size: 30px;
-  font-family: "Cormorant Garamond", serif;
+  font-size: 20px;
+  font-family: "Times New Roman", serif;
   font-weight: 300;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -366,7 +365,7 @@ body {
 }
 
 .intro-couple-name {
-  font-family: var(--couple-font);
+  font-family: "Cormorant Garamond", serif;
   font-weight: 400;
   font-size: clamp(28px, 8vw, 48px);
   color: #fff;
@@ -1194,12 +1193,16 @@ body {
 }
 
 .rsvp-screen .rsvp-screen-content {
+  /* Bottom-align the content like the other sections when it's short (e.g.
+     the "thank you" state); when the full form is taller than the screen the
+     auto margin collapses and it scrolls from the top so the title shows. */
+  margin-top: auto;
   max-height: 100%;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   padding-top: clamp(38px, 7vh, 76px);
-  padding-bottom: clamp(28px, 6vh, 56px);
+  padding-bottom: clamp(28px, 6vh, 64px);
 }
 
 .rsvp-screen .rsvp-screen-content::-webkit-scrollbar {
@@ -1307,9 +1310,9 @@ body {
 }
 
 .rsvp-pill--decline.rsvp-pill--active {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.3);
-  color: rgba(255, 255, 255, 0.65);
+  background: rgba(184, 92, 92, 0.22);
+  border-color: rgba(196, 104, 104, 0.65);
+  color: #e2a5a5;
 }
 
 /* Guest stepper */
@@ -2018,7 +2021,7 @@ body {
 /* ─── Scroll hint chevron ────────────────────────────── */
 .scroll-hint {
   position: absolute;
-  bottom: 26px;
+  bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
@@ -2245,4 +2248,21 @@ html[dir="rtl"] .lang-toggle {
 html[dir="rtl"] .rsvp-contact-num {
   direction: ltr;
   unicode-bidi: embed;
+}
+
+/* Couple names in Arabic — Amiri font (the Latin titling font can't render
+   Arabic), and read right-to-left so the groom is on the right, bride on
+   the left. English keeps its LTR order. */
+html[dir="rtl"] .hero-monogram,
+html[dir="rtl"] .hero-amp,
+html[dir="rtl"] .intro-couple-name,
+html[dir="rtl"] .intro-couple-amp {
+  font-family: "Amiri", serif;
+  font-style: normal;
+  letter-spacing: normal;
+}
+
+html[dir="rtl"] .hero-monogram,
+html[dir="rtl"] .intro-couple-names {
+  direction: rtl;
 }

@@ -10,16 +10,18 @@ function toArabicDigits(s: string): string {
 }
 
 export default function CoverHero({ onStart }: CoverHeroProps) {
-  const { groom, bride, date } = wedding;
+  const { date } = wedding;
   const { lang, t } = useLang();
 
-  // Short date as DD.MM.YY (e.g. 22.08.26)
   const d = new Date(date);
   const dd = String(d.getDate()).padStart(2, "0");
   const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const yy = String(d.getFullYear()).slice(-2);
-  const shortDate = `${dd}.${mm}.${yy}`;
-  const dateLabel = lang === "ar" ? toArabicDigits(shortDate) : shortDate;
+  const yy = String(d.getFullYear());
+  // English reads DD.MM.YYYY (day left). Arabic reads right-to-left, so the
+  // day must sit on the right — build it year.month.day so it renders that way.
+  const dateLabel = lang === "ar"
+    ? toArabicDigits(`${yy}.${mm}.${dd}`)
+    : `${dd}.${mm}.${yy}`;
 
   return (
     <div className="cover-screen hero-screen" onClick={onStart} style={{ cursor: "pointer" }}>
@@ -31,7 +33,7 @@ export default function CoverHero({ onStart }: CoverHeroProps) {
 
         <div className="lum-line" />
 
-        <div className="hero-monogram">{groom} <span className="hero-amp">&amp;</span> {bride}</div>
+        <div className="hero-monogram">{t("couple.groom")} <span className="hero-amp">{t("couple.and")}</span> {t("couple.bride")}</div>
         <div className="hero-date">{dateLabel}</div>
       </div>
     </div>

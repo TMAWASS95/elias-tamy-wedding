@@ -18,6 +18,11 @@ const en: Dict = {
   "cover.family2": "Georges & Joulia Mawass Family",
   "cover.intro2": "cordially invite you to celebrate\nthe wedding of",
 
+  // Couple names (localized display)
+  "couple.groom": "Elias",
+  "couple.bride": "Tamy",
+  "couple.and": "&",
+
   // Common
   "common.getDirections": "Get Directions",
 
@@ -71,6 +76,11 @@ const ar: Dict = {
   "cover.family1": "عائلة شارل نصراني",
   "cover.family2": "عائلة جورج المواس",
   "cover.intro2": "بدعوتكم لحضور حفل زفاف",
+
+  // Couple names (localized display)
+  "couple.groom": "إلياس",
+  "couple.bride": "تامي",
+  "couple.and": "و",
 
   // Common
   "common.getDirections": "الإتجاهات",

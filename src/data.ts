@@ -58,7 +58,7 @@ export const weddingEvents: WeddingEvent[] = [
     id: "ceremony",
     title: "Ceremony",
     name: "Alyasa Village",
-    sub: "Saint Alishaa Church",
+    sub: "Saint Licha Church",
     address: null,
     time: "6:30 PM",
     mapUrl: "https://maps.google.com/?q=5Q5P%2B3M+Saqi+Rechmaiya",
@@ -224,6 +224,26 @@ export const guests: GuestEntry[] = [
  { slug: "carole-fares", name: "Carole Fares", maxGuests: 1 },
  { slug: "georges-micha-fares", name: "Georges & Micha Fares", maxGuests: 2 },
 
+ { slug: "georges-rebecca", name: "Georges & Rebecca", maxGuests: 2 },
+ { slug: "freddy-perla", name: "Freddy & Perla", maxGuests: 2 },
+ { slug: "youssef-nouhad-nasrany", name: "Youssef & Nouhad Nasrany", maxGuests: 2 },
+ { slug: "fouad-ivette-bou-saad", name: "Fouad & Ivette Bou Saad", maxGuests: 2 },
+ { slug: "roger-nasrany", name: "Roger Nasrany", maxGuests: 2 },
+ { slug: "raymond-bou-chaaya", name: "Raymond Bou Chaaya", maxGuests: 4 },
+ { slug: "mahmud-maya", name: "Mahmoud Chehabeddine", maxGuests: 1 },
+ { slug: "jad-harfouche", name: "Jad Harfouche", maxGuests: 1 },
+ { slug: "ali-hajj-hassan", name: "Ali Hajj Hassan", maxGuests: 1 },
+ { slug: "joya-maria-metri", name: "Joya Maria Metri", maxGuests: 1 },
+ { slug: "karim-abou-chakra", name: "Karim Abou Chakra", maxGuests: 1 },
+ { slug: "tony-darine-khoury", name: "Tony & Darine Khoury", maxGuests: 2 },
+ { slug: "wassim-rania-khalil", name: "Wassim & Rania Khalil", maxGuests: 2 },
+ { slug: "bassam-liliane-matar", name: "Bassam & Liliane Matar", maxGuests: 2 },
+
+ { slug: "afif-jamale-bousaad", name: "Afif & Jamale Bou Saad", maxGuests: 2 },
+ { slug: "kamal-chhimi", name: "Kamal Chhimi", maxGuests: 1 },
+ { slug: "rayan-rayeh", name: "Rayan Rayeh", maxGuests: 1 },
+ { slug: "hayat-borji", name: "Hayat Borji", maxGuests: 1 },
+ { slug: "silvanachahine", name: "Silvana Chahine", maxGuests: 1 },
 
 ];
 

@@ -32,9 +32,9 @@ export default function Cover({ onStart }: CoverProps) {
         <p className="lum-body lum-body--art" style={{ whiteSpace: "pre-line" }}>{t("cover.intro2")}</p>
 
         <div className="intro-couple-names">
-          <span className="intro-couple-name">{groom}</span>
-          <span className="intro-couple-amp">&amp;</span>
-          <span className="intro-couple-name">{bride}</span>
+          <span className="intro-couple-name">{t("couple.groom")}</span>
+          <span className="intro-couple-amp">{t("couple.and")}</span>
+          <span className="intro-couple-name">{t("couple.bride")}</span>
         </div>
       </div>
     </div>

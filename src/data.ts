@@ -50,8 +50,8 @@ export const weddingEvents: WeddingEvent[] = [
     icon: "arch",
     description: "The groom and bride will each welcome guests at their place before the ceremony — feel free to join us early.",
     parties: [
-      { label: "Groom welcomes you at", name: "Alyasa Village", sub: "The Villa", time: "from 4:00 PM", mapUrl: "https://maps.google.com/?q=5Q5P%2B3M+Saqi+Rechmaiya" },
-      { label: "Bride welcomes you at", name: "Alyasa Village", sub: "The Idle Lounge", time: "from 4:00 PM", mapUrl: "https://maps.google.com/?q=5Q5P%2B3M+Saqi+Rechmaiya" },
+      { label: "Groom welcomes you at", name: "Alyasa Village", sub: "The Villa", time: "from 4:30 PM", mapUrl: "https://maps.google.com/?q=5Q5P%2B3M+Saqi+Rechmaiya" },
+      { label: "Bride welcomes you at", name: "Alyasa Village", sub: "The Idle Lounge", time: "from 4:30 PM", mapUrl: "https://maps.google.com/?q=5Q5P%2B3M+Saqi+Rechmaiya" },
     ],
   },
   {
@@ -82,13 +82,14 @@ export type GuestEntry = {
   maxGuests: number;         // max attendies guests this person may bring
   title?: "Mr" | "Mrs";      // honorific shown before the name
   withFamily?: boolean;      // append "& his/her family"
+  lang?: "en" | "ar";        // default language shown when this guest opens their link
 };
 
 // First names used to infer Mr/Mrs for single-name guests.
 // Override per guest with the `title` field if any of these is wrong.
 const MALE_FIRST_NAMES = new Set([
   "georges", "elias", "elie", "charbel", "kamal", "thomas", "gilbert", "paul",
-  "ali", "roudy", "jad", "alain", "nadim", "karl", "wissam", "jack", "jacques",
+  "ali", "roudy", "jad", "alain", "nadim", "karl", "wissam", "jack", "jacques","Mahmoud", "Roger"
 ]);
 const FEMALE_FIRST_NAMES = new Set([
   "christine", "rouba", "samira", "rita", "marie", "donara", "serena",
@@ -131,40 +132,39 @@ export const guests: GuestEntry[] = [
   { slug: "christine", name: "Christine", maxGuests: 2 },
   { slug: "rouba",     name: "Rouba",     maxGuests: 8 },
   // Unlimited Attendies guests
-  { slug: "charles-antoinette-nasrany", name: "Charles & Antoinette Nasrany", maxGuests: 10 },
-  { slug: "nicolas-christelle-anaissy", name: "Nicolas & Christelle Anaissy", maxGuests: 10 },
-  { slug: "tony-marleine-nasrany", name: "Tony & Marleine Nasrany", maxGuests: 10 },
+  { slug: "charles-antoinette-nasrany", name: "Charles & Antoinette Nasrany", maxGuests: 10, lang: "ar" },
+  { slug: "nicolas-christelle-anaissy", name: "Nicolas & Christelle Anaissy", maxGuests: 4, lang: "en" },
+  { slug: "tony-marleine-nasrany", name: "Tony & Marleine Nasrany", maxGuests: 6 },
   { slug: "rebecca-daou", name: "Rebecca Daou", maxGuests: 2 },
   { slug: "perla-jabbour", name: "Perla Jabbour", maxGuests: 1 },
   { slug: "rony-jessica-nasrany", name: "Rony & Jessica Nasrany", maxGuests: 4 },
   { slug: "joseph-jihane-nasrany", name: "Joseph & Jihane Nasrany", maxGuests: 4 },
   { slug: "jack-therese-nasrany", name: "Jack & Therese Nasrany", maxGuests: 2 },
   { slug: "joe-cendrella-chdid", name: "Joe & Cendrella Chdid", maxGuests: 3 },
-  { slug: "roy-stephanie", name: "Roy & Stephanie", maxGuests: 3 },
+  { slug: "roy-stephanie-warcha", name: "Roy & Stephanie", maxGuests: 3 },
   { slug: "samira-anaissy", name: "Samira Anaissy", maxGuests: 1 },
   { slug: "nizar-anna-khaleed", name: "Nizar & Anna Khaleed", maxGuests: 2 },
-  { slug: "fady-rida-bou-saad", name: "Fady & Rida Bou Saad", maxGuests: 4 },
-  { slug: "brandan-nabhan", name: "Brandan & Antonella", maxGuests: 1 },
-  { slug: "elias-maria-hachem", name: "Elias & Maria Hachem", maxGuests: 2 },
+  { slug: "fady-rida-bou-saad", name: "Fady & Rida Bou Saad", maxGuests: 5 },
+  { slug: "elias-maria-abi-hachem", name: "Elias Abi Hachem & Maria Bou Saad", maxGuests: 2 },
   { slug: "elie-nadine-bou-saad", name: "Elie & Nadine Bou Saad", maxGuests: 2 },
   { slug: "charbel-joelle-bou-saad", name: "Charbel & Joelle Bou Saad", maxGuests: 4 },
-  { slug: "raymond-manale", name: "Raymond & Manale", maxGuests: 4 },
-  { slug: "boutros-rosette", name: "Boutros & Rosette", maxGuests: 3 },
-  { slug: "michael-joelle-nasrany", name: "Michael & Joelle Nasrany", maxGuests: 4 },
+  { slug: "raymond-manale-bou-chaaya", name: "Raymond & Manale Bou Chaaya", maxGuests: 4 },
+  { slug: "boutros-rosette-nasrany", name: "Boutros & Rosette Nasrany", maxGuests: 3 },
+  { slug: "michael-joelle-nasrany", name: "Michael & Joelle Nasrany", maxGuests: 5 },
   { slug: "georges-lamia-nasrany", name: "Georges & Lamia Nasrany", maxGuests: 4 },
   { slug: "elias-cynthia-nasrany", name: "Elias & Cynthia Nasrany", maxGuests: 2 },
-  { slug: "charbel-elham-nasrany", name: "Charbel & Elham Nasrany", maxGuests: 6 },
+  { slug: "charbel-elham-nasrany", name: "Charbel & Elham Nasrany", maxGuests: 2 },
   { slug: "rita-nasrany", name: "Rita Nasrany", maxGuests: 2 },
   { slug: "kamal-adabachi", name: "Kamal Adabachi", maxGuests: 1 },
   { slug: "charbel-merhi", name: "Charbel Merhi", maxGuests: 1 },
-  { slug: "marie-hussein", name: "Marie Hussein", maxGuests: 1 },
+  { slug: "marie-husseini", name: "Marie Husseini", maxGuests: 1 },
   { slug: "thomas-abboud", name: "Thomas Abboud", maxGuests: 1 },
   { slug: "jawad-sirine", name: "Jawad Bou Youness & Sirine Wahidi", maxGuests: 2 },
   { slug: "ahmad-maha", name: "Ahmad Sibai & Maha Abou Jaoude", maxGuests: 2 },
   { slug: "gilbert-abi-rizk", name: "Gilbert Abi Rizk", maxGuests: 1 },
   { slug: "jad-louloua", name: "Jad Saoudi & Louloua Salhab", maxGuests: 2 },
-  { slug: "charbel-karam", name: "Charbel Karam", maxGuests: 0 },
-  { slug: "paul-farah", name: "Paul Farah", maxGuests: 0 },
+  { slug: "charbel-karam", name: "Charbel Karam", maxGuests: 1 },
+  { slug: "paul-farah", name: "Paul Farah", maxGuests: 1 },
   { slug: "peter-chantale-nohra", name: "Peter & Chantale Nohra", maxGuests: 4 },
   { slug: "ali-hammoud", name: "Ali Hammoud", maxGuests: 1 },
   { slug: "roudy-al-chammas", name: "Roudy Al Chammas", maxGuests: 2 },
@@ -182,11 +182,11 @@ export const guests: GuestEntry[] = [
 
 
 
- { slug: "georges-joulia-mawass", name: "Georges & Joulia Mawass", maxGuests: 999 },
+ { slug: "georges-joulia-mawass", name: "Georges & Joulia Mawass", maxGuests: 3 },
  { slug: "charbel-remy-ferik", name: "Charbel & Remy Ferik", maxGuests: 2 },
- { slug: "rizk-andrea-mawass", name: "Rizk & Andrea Mawass", maxGuests: 10 },
+ { slug: "rizk-andrea-mawass", name: "Rizk & Andrea Mawass", maxGuests: 4 },
  { slug: "kayssar-rita-addam", name: "Kayssar & Rita Addam", maxGuests: 2 },
- { slug: "eddy-elida-daou", name: "Eddy & Elida Daou", maxGuests: 10 },
+ { slug: "eddy-elida-daou", name: "Eddy & Elida Daou", maxGuests: 3 },
  { slug: "raymond-mireille-daou", name: "Raymond & Mireille Daou", maxGuests: 2 },
  { slug: "Wissam-ramona-", name: "Wissam & Ramona ", maxGuests: 2 },
  { slug: "pierre-katia-azzi", name: "Pierre & Katia Azzi", maxGuests: 3 },
@@ -228,22 +228,23 @@ export const guests: GuestEntry[] = [
  { slug: "freddy-perla", name: "Freddy & Perla", maxGuests: 2 },
  { slug: "youssef-nouhad-nasrany", name: "Youssef & Nouhad Nasrany", maxGuests: 2 },
  { slug: "fouad-ivette-bou-saad", name: "Fouad & Ivette Bou Saad", maxGuests: 2 },
- { slug: "roger-nasrany", name: "Roger Nasrany", maxGuests: 2 },
+ { slug: "roger-nasrany", name: "Roger Nasrany", maxGuests: 2, title: "Mr" },
  { slug: "raymond-bou-chaaya", name: "Raymond Bou Chaaya", maxGuests: 4 },
- { slug: "mahmud-maya", name: "Mahmoud Chehabeddine", maxGuests: 1 },
+ { slug: "mahmoud-chehabeddine", name: "Mahmoud Chehabeddine", maxGuests: 1, title: "Mr" },
  { slug: "jad-harfouche", name: "Jad Harfouche", maxGuests: 1 },
  { slug: "ali-hajj-hassan", name: "Ali Hajj Hassan", maxGuests: 1 },
- { slug: "joya-maria-metri", name: "Joya Maria Metri", maxGuests: 1 },
- { slug: "karim-abou-chakra", name: "Karim Abou Chakra", maxGuests: 1 },
+ { slug: "joya-maria-metri", name: "Joya Maria Metri", maxGuests: 1, title: "Mrs" },
+ { slug: "karim-abou-chakra", name: "Karim Abou Chakra", maxGuests: 1, title: "Mr" },
  { slug: "tony-darine-khoury", name: "Tony & Darine Khoury", maxGuests: 2 },
  { slug: "wassim-rania-khalil", name: "Wassim & Rania Khalil", maxGuests: 2 },
  { slug: "bassam-liliane-matar", name: "Bassam & Liliane Matar", maxGuests: 2 },
 
- { slug: "afif-jamale-bousaad", name: "Afif & Jamale Bou Saad", maxGuests: 2 },
+ { slug: "afif-jamale-bou-saad", name: "Afif & Jamale Bou Saad", maxGuests: 2 },
  { slug: "kamal-chhimi", name: "Kamal Chhimi", maxGuests: 1 },
  { slug: "rayan-rayeh", name: "Rayan Rayeh", maxGuests: 1 },
  { slug: "hayat-borji", name: "Hayat Borji", maxGuests: 1 },
  { slug: "silvanachahine", name: "Silvana Chahine", maxGuests: 1 },
+ { slug: "elie-elene-bou-saad", name: "Elie & Elene Bou Saad", maxGuests: 2 },
 
 ];
 

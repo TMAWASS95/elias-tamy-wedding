@@ -9,6 +9,12 @@ function toArabicDigits(s: string): string {
   return s.replace(/\d/g, (d) => "٠١٢٣٤٥٦٧٨٩"[Number(d)]);
 }
 
+// Levantine (Mashriq) month names — uses "آب" for August.
+const AR_MONTHS = [
+  "كانون الثاني", "شباط", "آذار", "نيسان", "أيار", "حزيران",
+  "تموز", "آب", "أيلول", "تشرين الأول", "تشرين الثاني", "كانون الأول",
+];
+
 export default function CoverHero({ onStart }: CoverHeroProps) {
   const { date } = wedding;
   const { lang, t } = useLang();
@@ -17,10 +23,9 @@ export default function CoverHero({ onStart }: CoverHeroProps) {
   const dd = String(d.getDate()).padStart(2, "0");
   const mm = String(d.getMonth() + 1).padStart(2, "0");
   const yy = String(d.getFullYear());
-  // English reads DD.MM.YYYY (day left). Arabic reads right-to-left, so the
-  // day must sit on the right — build it year.month.day so it renders that way.
+  // Arabic: "٢٢ آب ٢٠٢٦" (day + Levantine month name + year), flows RTL.
   const dateLabel = lang === "ar"
-    ? toArabicDigits(`${yy}.${mm}.${dd}`)
+    ? `${toArabicDigits(String(d.getDate()))} ${AR_MONTHS[d.getMonth()]} ${toArabicDigits(yy)}`
     : `${dd}.${mm}.${yy}`;
 
   return (

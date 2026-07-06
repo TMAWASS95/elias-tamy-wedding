@@ -53,8 +53,10 @@ const en: Dict = {
   "rsvp.accepts": "Joyfully accepts",
   "rsvp.declines": "Regretfully declines",
   "rsvp.attending": "Attending",
+  "rsvp.maxNote": "This invitation is reserved for up to {n} guest(s).",
   "rsvp.confirmNote": "Kindly confirm your presence by clicking the button below.",
   "rsvp.confirm": "Confirm RSVP",
+  "rsvp.confirmDecline": "Send Response",
   "rsvp.orSend": "Or send your response to one of the numbers below.",
   "rsvp.groom": "Groom",
   "rsvp.bride": "Bride",
@@ -112,8 +114,10 @@ const ar: Dict = {
   "rsvp.accepts": "يسعدنا الحضور",
   "rsvp.declines": "نعتذر عن الحضور",
   "rsvp.attending": "عدد الحضور",
+  "rsvp.maxNote": "هذه الدعوة مخصّصة لعدد {n} أشخاص.",
   "rsvp.confirmNote": "الرجاء تأكيد حضوركم بالضغط على الزر أدناه.",
   "rsvp.confirm": "تأكيد الحضور",
+  "rsvp.confirmDecline": "إرسال الردّ",
   "rsvp.orSend": "أو أرسلوا ردّكم إلى أحد الأرقام أدناه.",
   "rsvp.groom": "العريس",
   "rsvp.bride": "العروس",
@@ -149,7 +153,7 @@ const arEvents: Record<string, ArEvent> = {
     description:
       "سيستقبل العريس والعروس ضيوفهما كلٌّ في مكانه قبل القداس — يسعدنا انضمامكم إلينا باكراً.",
     parties: [
-      { label: "بيت العريس", name: "قرية أليسع", sub: "الفيلا", time: "من الساعة ٤:٣٠ مساءً" },
+      { label: "بيت العريس", name: "قرية أليسع", sub: "ذا ڤيلا", time: "من الساعة ٤:٣٠ مساءً" },
       { label: "بيت العروس", name: "قرية أليسع", sub: "ذا آيدل لاونج", time: "من الساعة ٤:٣٠ مساءً" },
     ],
   },
@@ -162,7 +166,7 @@ const arEvents: Record<string, ArEvent> = {
   dinner: {
     title: "حفل العشاء",
     name: "قرية أليسع",
-    sub: "صالة أركاديا (المسبح)",
+    sub: "صالة أركاديا ",
     time: "٨:٣٠ مساءً",
   },
 };

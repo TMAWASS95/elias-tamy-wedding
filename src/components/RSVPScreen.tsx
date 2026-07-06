@@ -170,6 +170,11 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
             {rsvp === "yes" && (
               <div className="rsvp-field">
                 <span className="rsvp-field-label">{t("rsvp.attending")}</span>
+                {maxGuests != null && maxGuests > 0 && maxGuests < 100 && (
+                  <p className="rsvp-max-note">
+                    {t("rsvp.maxNote").replace("{n}", String(maxGuests))}
+                  </p>
+                )}
                 <GuestStepper
                   value={guests}
                   onChange={setGuests}
@@ -185,7 +190,7 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
             </p>
 
             <button className="rsvp-submit-btn" type="submit">
-              {t("rsvp.confirm")}
+              {rsvp === "no" ? t("rsvp.confirmDecline") : t("rsvp.confirm")}
             </button>
 
             <p className="rsvp-contact-note">

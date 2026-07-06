@@ -9,6 +9,7 @@ import RSVPScreen from "./components/RSVPScreen";
 import AdminDashboard from "./components/AdminDashboard";
 import ETRoute from "./components/ETRoute";
 import LanguageToggle from "./components/LanguageToggle";
+import { useLang } from "./i18n";
 import { guests, weddingEvents, formatGuestName, type GuestEntry } from "./data";
 
 declare global {
@@ -21,13 +22,13 @@ declare global {
 const YT_VIDEO_ID = "zcdMC_VScUE";
 
 const SECTION_IMAGES: (string | null)[] = [
-  import.meta.env.BASE_URL + "img2.jpg",        // Hero (ET + date)
-  import.meta.env.BASE_URL + "DAS couple.jpg",  // Cover (intro)
-  import.meta.env.BASE_URL + "DAS 2148.jpg",    // Getting Ready
-  import.meta.env.BASE_URL + "DAS 2168.jpg",    // Ceremony
-  import.meta.env.BASE_URL + "DAS 2180.jpg",    // Dinner
-  import.meta.env.BASE_URL + "DAS 2270.jpg",    // Gift Registry (was Countdown's image)
-  import.meta.env.BASE_URL + "couple.png",      // RSVP (was Gift Registry's image)
+  import.meta.env.BASE_URL + "1st pic DAS 2206.png",  // Hero (ET + date)
+  import.meta.env.BASE_URL + "2nd pic DAS 2133.png",  // Cover (intro)
+  import.meta.env.BASE_URL + "3rd DAS 2148.png",    // Getting Ready
+  import.meta.env.BASE_URL + "4th DAS 2168.png",    // Ceremony
+  import.meta.env.BASE_URL + "5th DAS 2179.png",    // Dinner
+  import.meta.env.BASE_URL + "6th DAS 2270.png",    // Gift Registry
+  import.meta.env.BASE_URL + "7th DAS 2112.png",      // RSVP
 ];
 
 function Wedding({ guest, slug }: { guest: GuestEntry | null; slug?: string }) {
@@ -36,10 +37,16 @@ function Wedding({ guest, slug }: { guest: GuestEntry | null; slug?: string }) {
   const playerRef        = useRef<any>(null);
   const sectionRefs      = useRef<(HTMLDivElement | null)[]>([]);
   const snapContainerRef = useRef<HTMLDivElement>(null);
+  const { setLang } = useLang();
 
   const scrollTo = (i: number) => {
     sectionRefs.current[i]?.scrollIntoView({ behavior: "smooth" });
   };
+
+  // Apply the guest's default language when their personalized link loads.
+  useLayoutEffect(() => {
+    if (guest?.lang) setLang(guest.lang);
+  }, [guest?.lang]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Lock the window scroll while the full-screen snap experience is mounted,
   // so the page never shows a second (body) scrollbar alongside the snap one.

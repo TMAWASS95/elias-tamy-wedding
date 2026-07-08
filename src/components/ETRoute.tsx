@@ -23,7 +23,7 @@ export default function ETRoute() {
         >
           ET
         </div>
-        <div
+        {/* <div
           style={{
             marginTop: "12px",
             fontFamily: "var(--couple-font)",
@@ -36,7 +36,7 @@ export default function ETRoute() {
           }}
         >
           Elias <span className="hero-amp">&amp;</span> Tamy
-        </div>
+        </div> */}
       </div>
     </div>
   );

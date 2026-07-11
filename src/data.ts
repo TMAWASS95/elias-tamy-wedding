@@ -67,7 +67,7 @@ export const weddingEvents: WeddingEvent[] = [
   {
     id: "dinner",
     title: "Dinner Reception",
-    sub: "The Arcadia Pool Venue",
+    sub: "The Arcadia Venue",
     name: "Alyasa Village",
     address: null,
     time: "8:30 PM",
@@ -244,6 +244,8 @@ export const guests: GuestEntry[] = [
  { slug: "silvana-chahine", name: "Silvana Chahine", maxGuests: 1, title:"Mrs" },
  { slug: "yaacoub-amale-ferik", name: "Yaacoub & Amale Ferik", maxGuests: 4, lang: "ar" },
  { slug: "wissam-ramona-dibra", name: "Wissam & Ramona Dibra", maxGuests: 2, lang: "ar" },
+ { slug: "nicolas-amoula-abboud", name: "Nicolas & Amoula Abboud", maxGuests: 2, lang: "ar" },
+ { slug: "nicolas-abboud", name: "Nicolas Abboud", maxGuests: 2, lang: "ar" },
 
 
 

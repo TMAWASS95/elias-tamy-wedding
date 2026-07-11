@@ -17,12 +17,6 @@ export default function Invitation({ onContinue: _onContinue }: InvitationProps)
 
       <div className="lum-content lum-content--center">
         <div className="lum-line" />
-        <img
-          src={`${import.meta.env.BASE_URL}logo.png`}
-          alt={`${wedding.groom} & ${wedding.bride}`}
-          className="couple-logo couple-logo--invite"
-        />
-        <div className="lum-line" />
         <p className="lum-date">
           {weekday}, {month} {day}, {year}
         </p>

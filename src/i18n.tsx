@@ -65,6 +65,7 @@ const en: Dict = {
   "rsvp.thanksNew": "Thank you! We can't wait to celebrate with you.",
   "rsvp.errorNoDb": "RSVP saving is not set up yet. Please contact the couple.",
   "rsvp.errorGeneric": "Something went wrong. Please try again.",
+  "rsvp.errorNoGuests": "Please add at least one guest to confirm.",
 
   // Language toggle (label shows the language you switch TO)
   "lang.switch": "ع",
@@ -126,6 +127,7 @@ const ar: Dict = {
   "rsvp.thanksNew": "شكراً لكم! لا نطيق صبراً للاحتفال معكم.",
   "rsvp.errorNoDb": "خدمة التسجيل غير مفعّلة بعد. الرجاء التواصل مع العروسين.",
   "rsvp.errorGeneric": "حدث خطأٌ ما. الرجاء المحاولة مرة أخرى.",
+  "rsvp.errorNoGuests": "الرجاء إضافة شخص واحد على الأقل لتأكيد الحضور.",
 
   // Language toggle
   "lang.switch": "EN",

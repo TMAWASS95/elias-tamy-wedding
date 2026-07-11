@@ -22,13 +22,13 @@ declare global {
 const YT_VIDEO_ID = "zcdMC_VScUE";
 
 const SECTION_IMAGES: (string | null)[] = [
-  import.meta.env.BASE_URL + "1st pic DAS 2206.png",  // Hero (ET + date)
-  import.meta.env.BASE_URL + "2nd pic DAS 2133.png",  // Cover (intro)
-  import.meta.env.BASE_URL + "3rd DAS 2148.png",    // Getting Ready
-  import.meta.env.BASE_URL + "4th DAS 2168.png",    // Ceremony
-  import.meta.env.BASE_URL + "5th DAS 2179.png",    // Dinner
-  import.meta.env.BASE_URL + "6th DAS 2270.png",    // Gift Registry
-  import.meta.env.BASE_URL + "7th DAS 2112.png",      // RSVP
+  import.meta.env.BASE_URL + "1st pic DAS 2206.webp",  // Hero (ET + date)
+  import.meta.env.BASE_URL + "2nd pic DAS 2133.webp",  // Cover (intro)
+  import.meta.env.BASE_URL + "3rd DAS 2148.webp",    // Getting Ready
+  import.meta.env.BASE_URL + "4th DAS 2168.webp",    // Ceremony
+  import.meta.env.BASE_URL + "5th DAS 2179.webp",    // Dinner
+  import.meta.env.BASE_URL + "6th DAS 2270.webp",    // Gift Registry
+  import.meta.env.BASE_URL + "7th DAS 2112.webp",      // RSVP
 ];
 
 function Wedding({ guest, slug }: { guest: GuestEntry | null; slug?: string }) {

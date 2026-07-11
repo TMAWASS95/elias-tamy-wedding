@@ -61,7 +61,7 @@ export const weddingEvents: WeddingEvent[] = [
     sub: "Saint Licha Church",
     address: null,
     time: "6:30 PM",
-    mapUrl: "https://maps.google.com/?q=5Q5P%2B3M+Saqi+Rechmaiya",
+    mapUrl: "https://maps.google.com/?q=5Q5P%2B5W9+Saqi+Rechmaiya",
     icon: "arch",
   },
   {

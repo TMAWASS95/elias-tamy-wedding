@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "PowerShell(npm run build)",
-      "PowerShell(git add -A)"
+      "PowerShell(git add -A)",
+      "PowerShell(git push origin main)",
+      "PowerShell(npm run deploy)"
     ]
   }
 }

@@ -71,6 +71,10 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
     e.preventDefault();
     setError(null);
     if (submission !== null) return;
+    if (rsvp === "yes" && guests < 1) {
+      setError(t("rsvp.errorNoGuests"));
+      return;
+    }
     if (!db) {
       setError(t("rsvp.errorNoDb"));
       return;
@@ -189,7 +193,11 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
               {t("rsvp.confirmNote")}
             </p>
 
-            <button className="rsvp-submit-btn" type="submit">
+            <button
+              className="rsvp-submit-btn"
+              type="submit"
+              disabled={rsvp === "yes" && guests < 1}
+            >
               {rsvp === "no" ? t("rsvp.confirmDecline") : t("rsvp.confirm")}
             </button>
 

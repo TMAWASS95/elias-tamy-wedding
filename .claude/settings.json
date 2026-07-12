@@ -8,7 +8,8 @@
       "Bash(cat src/main.tsx)",
       "Bash(cat vite.config.*)",
       "Bash(ls dist/404.html)",
-      "Bash(ls public/404.html)"
+      "Bash(ls public/404.html)",
+      "PowerShell(npm run deploy 2>&1)"
     ]
   }
 }

@@ -6,37 +6,18 @@ import { resolve } from 'node:path'
 const SITE = 'https://www.eliastamywedding.com'
 const OG_IMAGE = `${SITE}/2nd%20pic%20DAS%202133.webp`
 
-// Language-specific WhatsApp / social preview copy.
-const preview = {
-  en: {
-    title: 'Elias & Tamy — Wedding Invitation',
-    desc: "You're invited — Join us as we celebrate our wedding · Saturday, August 22, 2026 · Alyasa Village",
-    locale: 'en_US',
-  },
-  ar: {
-    title: 'دعوة زفاف — إلياس وتامي',
-    desc: 'يسعدنا دعوتكم لمشاركتنا فرحة زفافنا · السبت ٢٢ آب ٢٠٢٦ · قرية أليسار',
-    locale: 'ar_LB',
-  },
-} as const
-
-const escape = (s: string) =>
-  s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-
-function socialBlock(lang: 'en' | 'ar', url: string): string {
-  const p = preview[lang]
+// Image-only social preview: no baked title/description text (the sender types
+// the invitation message themselves). og:title is intentionally empty so
+// WhatsApp doesn't fall back to the page <title>.
+function socialBlock(url: string): string {
   return [
     '<!-- SOCIAL:START -->',
     '<meta property="og:type" content="website" />',
-    '<meta property="og:site_name" content="Elias &amp; Tamy" />',
-    `<meta property="og:locale" content="${p.locale}" />`,
-    `<meta property="og:title" content="${escape(p.title)}" />`,
-    `<meta property="og:description" content="${escape(p.desc)}" />`,
+    '<meta property="og:title" content="" />',
     `<meta property="og:url" content="${url}" />`,
     `<meta property="og:image" content="${OG_IMAGE}" />`,
     '<meta name="twitter:card" content="summary_large_image" />',
-    `<meta name="twitter:title" content="${escape(p.title)}" />`,
-    `<meta name="twitter:description" content="${escape(p.desc)}" />`,
+    '<meta name="twitter:title" content="" />',
     `<meta name="twitter:image" content="${OG_IMAGE}" />`,
     '<!-- SOCIAL:END -->',
   ].join('\n    ')
@@ -58,10 +39,7 @@ function guestSocialPreviews(): Plugin {
         const lang: 'en' | 'ar' = g.lang === 'ar' ? 'ar' : 'en'
         const url = `${SITE}/${g.slug}`
         const html = base
-          .replace(
-            /<!-- SOCIAL:START[\s\S]*?SOCIAL:END -->/,
-            socialBlock(lang, url),
-          )
+          .replace(/<!-- SOCIAL:START[\s\S]*?SOCIAL:END -->/, socialBlock(url))
           .replace(
             '<html lang="en">',
             `<html lang="${lang}"${lang === 'ar' ? ' dir="rtl"' : ''}>`,

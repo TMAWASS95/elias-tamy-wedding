@@ -4,7 +4,11 @@
       "PowerShell(npm run build)",
       "PowerShell(git add -A)",
       "PowerShell(git push origin main)",
-      "PowerShell(npm run deploy)"
+      "PowerShell(npm run deploy)",
+      "Bash(cat src/main.tsx)",
+      "Bash(cat vite.config.*)",
+      "Bash(ls dist/404.html)",
+      "Bash(ls public/404.html)"
     ]
   }
 }

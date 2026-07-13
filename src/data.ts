@@ -89,7 +89,7 @@ export type GuestEntry = {
 // Override per guest with the `title` field if any of these is wrong.
 const MALE_FIRST_NAMES = new Set([
   "georges", "elias", "elie", "charbel", "kamal", "thomas", "gilbert", "paul",
-  "ali", "roudy", "jad", "alain", "nadim", "karl", "wissam", "jack", "jacques","Mahmoud", "Roger", "Roland"
+  "ali", "roudy", "jad", "alain", "nadim", "karl", "wissam", "jack", "jacques", "mahmoud", "roger", "roland", "salim"
 ]);
 const FEMALE_FIRST_NAMES = new Set([
   "christine", "rouba", "samira", "rita", "marie", "donara", "serena",

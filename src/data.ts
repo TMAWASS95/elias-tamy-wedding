@@ -196,6 +196,7 @@ export const guests: GuestEntry[] = [
 
 
  { slug: "georges-joulia-mawass", name: "Georges & Joulia Mawass", maxGuests: 3, lang:"ar" },
+ { slug: "salim-mawass", name: "Salim Mawass", maxGuests: 1, lang: "en" },
  { slug: "charbel-remy-ferik", name: "Charbel & Remy Ferik", maxGuests: 2, lang:"en" },
  { slug: "rizk-andrea-mawass", name: "Rizk & Andrea Mawass", maxGuests: 4, lang:"en" },
  { slug: "kayssar-rita-addam", name: "Kayssar & Rita Addam", maxGuests: 2, lang:"ar" },
@@ -246,6 +247,8 @@ export const guests: GuestEntry[] = [
  { slug: "nicolas-abboud", name: "Nicolas Abboud", maxGuests: 2, lang: "ar" },
  { slug: "rania-ferik", name: "Rania Ferik", maxGuests: 1, lang: "en" },
  { slug: "elias-ferik", name: "Elias Ferik", maxGuests: 1, lang: "en" },
+
+
 
 
 

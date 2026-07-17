@@ -251,7 +251,8 @@ export const guests: GuestEntry[] = [
  { slug: "yaacoub-amale-ferik", name: "Yaacoub & Amale Ferik", maxGuests: 2, lang: "ar" },
  { slug: "wissam-ramona-dibra", name: "Wissam & Ramona Dibra", maxGuests: 2, lang: "en" },
  { slug: "nicolas-amoula-abboud", name: "Nicolas & Amoula Abboud", maxGuests: 2, lang: "ar" },
- { slug: "nicolas-abboud", name: "Nicolas Abboud", maxGuests: 2, lang: "ar" },
+ { slug: "nicolas-abboud", name: "Nicolas Abboud", maxGuests: 2, title:"Mr", lang: "ar" },
+ { slug: "georges-abboud", name: "Georges Abboud", maxGuests: 2, title:"Mr", lang: "ar" },
  { slug: "rania-ferik", name: "Rania Ferik", maxGuests: 1, title: "Ms", lang: "en" },
  { slug: "elias-ferik", name: "Elias Ferik", maxGuests: 1, lang: "en" },
 

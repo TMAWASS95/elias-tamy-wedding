@@ -255,6 +255,7 @@ export const guests: GuestEntry[] = [
  { slug: "georges-abboud", name: "Georges Abboud", maxGuests: 2, title:"Mr", lang: "ar" },
  { slug: "rania-ferik", name: "Rania Ferik", maxGuests: 1, title: "Ms", lang: "en" },
  { slug: "elias-ferik", name: "Elias Ferik", maxGuests: 1, lang: "en" },
+ { slug: "ralph-marylin-fahed", name: "Ralph & Marylin Fahed", maxGuests: 2, lang: "en" },
 
 
 

@@ -80,7 +80,7 @@ export type GuestEntry = {
   slug: string;              // URL segment, e.g. "john-doe"  → /john-doe
   name: string;              // pre-filled in the RSVP form
   maxGuests: number;         // max attendies guests this person may bring
-  title?: "Mr" | "Mrs";      // honorific shown before the name
+  title?: "Mr" | "Mrs" | "Ms"; // honorific shown before the name
   withFamily?: boolean;      // append "& his/her family"
   lang?: "en" | "ar";        // default language shown when this guest opens their link
 };
@@ -92,13 +92,20 @@ const MALE_FIRST_NAMES = new Set([
   "ali", "roudy", "jad", "alain", "nadim", "karl", "wissam", "jack", "jacques", "mahmoud", "roger", "roland", "salim"
 ]);
 const FEMALE_FIRST_NAMES = new Set([
-  "christine", "rouba", "samira", "rita", "marie", "donara", "serena",
+  "christine", "samira", "rita", "marie", "donara", "serena",
   "elika", "carole","Rayan", "Rose"
 ]);
+// First names that take "Ms." — used mainly for the second person in couples,
+// where the honorific comes from name inference rather than the `title` field.
+const MS_FIRST_NAMES = new Set([
+  "pamela", "abla", "rouba", "rebecca", "perla", "maria",
+  "sirine", "maha", "louloua", "catherine", "reem"
+]);
 
-function inferTitle(name: string): "Mr" | "Mrs" | undefined {
+function inferTitle(name: string): "Mr" | "Mrs" | "Ms" | undefined {
   const first = name.trim().split(/\s+/)[0].toLowerCase();
   if (MALE_FIRST_NAMES.has(first)) return "Mr";
+  if (MS_FIRST_NAMES.has(first)) return "Ms";
   if (FEMALE_FIRST_NAMES.has(first)) return "Mrs";
   return undefined;
 }
@@ -130,6 +137,8 @@ export function formatGuestName(g: GuestEntry): string {
 export const guests: GuestEntry[] = [
   // Unlimited Attendies guests
   { slug: "charles-antoinette-nasrany", name: "Charles & Antoinette Nasrany", maxGuests: 2, lang: "ar" },
+  { slug: "jacques-nasrany", name: "Jacques Nasrany", maxGuests: 1, lang:"en" },
+  { slug: "charbel-nasrany", name: "Charbel Nasrany", maxGuests: 2, lang:"en" },
   { slug: "nicolas-christelle-anaissy", name: "Nicolas & Christelle Anaissy", maxGuests: 4, lang: "en" },
   { slug: "tony-marleine-nasrany", name: "Tony & Marleine Nasrany", maxGuests: 2, lang: "ar" },
   { slug: "rony-jessica-nasrany", name: "Rony & Jessica Nasrany", maxGuests: 4,lang:"en" },
@@ -152,7 +161,7 @@ export const guests: GuestEntry[] = [
   { slug: "rita-nasrany", name: "Rita Nasrany", maxGuests: 2, lang:"en" },
   { slug: "kamal-adabachi", name: "Kamal Adabachi", maxGuests: 1, lang:"en" },
   { slug: "charbel-merhi", name: "Charbel Merhi", maxGuests: 1, lang:"en" },
-  { slug: "marie-husseini", name: "Marie Husseini", maxGuests: 1, lang:"en" },
+  { slug: "marie-husseini", name: "Marie Husseini", maxGuests: 2, title: "Ms", lang:"en" },
   { slug: "thomas-abboud", name: "Thomas Abboud", maxGuests: 1, lang:"en" },
   { slug: "jawad-sirine", name: "Jawad Bou Youness & Sirine Wahidi", maxGuests: 2, lang:"en" },
   { slug: "ahmad-maha", name: "Ahmad Sibai & Maha Abou Jaoude", maxGuests: 2, lang:"en" },
@@ -170,8 +179,6 @@ export const guests: GuestEntry[] = [
   { slug: "jean-claude-reina-takchi", name: "Jean Claude & Reina Takchi", maxGuests: 2, lang:"en" },
   { slug: "elie-eliane-mansourati", name: "Elie & Eliane Mansourati", maxGuests: 2, lang:"en" }, 
   { slug: "elie-elene-bou-saad", name: "Elie & Elene Bou Saad", maxGuests: 2, lang:"en" },
-  { slug: "jacques-nasrany", name: "Jacques Nasrany", maxGuests: 1, lang:"en" },
-  { slug: "charbel-nasrany", name: "Charbel Nasrany", maxGuests: 1, lang:"en" },
   { slug: "roland-abi-saad", name: "Roland Abi Saad", maxGuests: 1, title:"Mr", lang: "en" },
   { slug: "rose-abi-saad", name: "Rose Abi Saad", maxGuests: 1,title:"Mrs" , lang: "ar" },
   { slug: "georges-rebecca", name: "Georges Nasrany & Rebecca Daou", maxGuests: 2, lang:"en" },
@@ -182,7 +189,7 @@ export const guests: GuestEntry[] = [
   { slug: "mahmoud-chehabeddine", name: "Mahmoud Chehabeddine", maxGuests: 1, title: "Mr", lang:"en" },
   { slug: "jad-harfouche", name: "Jad Harfouche", maxGuests: 1, lang:"en" },
   { slug: "ali-hajj-hassan", name: "Ali Hajj Hassan", maxGuests: 1, lang:"en" },
-  { slug: "joya-maria-mitri", name: "Joya Maria Mitri", maxGuests: 1, title: "Mrs", lang:"en" },
+  { slug: "joya-maria-mitri", name: "Joya Maria Mitri", maxGuests: 1, title: "Ms", lang:"en" },
   { slug: "karim-abou-chakra", name: "Karim Abou Chakra", maxGuests: 1, title: "Mr", lang:"en" },
   { slug: "tony-darine-khoury", name: "Tony & Darine Khoury", maxGuests: 2, lang:"ar" },
   { slug: "wassim-rania-khalil", name: "Wassim & Rania Khalil", maxGuests: 2, lang:"ar" },
@@ -196,7 +203,7 @@ export const guests: GuestEntry[] = [
 
 
  { slug: "georges-joulia-mawass", name: "Georges & Joulia Mawass", maxGuests: 3, lang:"ar" },
- { slug: "salim-mawass", name: "Salim Mawass", maxGuests: 1, lang: "en" },
+ { slug: "salim-mawass", name: "Salim Mawass", maxGuests: 2, lang: "en" },
  { slug: "charbel-remy-ferik", name: "Charbel & Remy Ferik", maxGuests: 2, lang:"en" },
  { slug: "rizk-andrea-mawass", name: "Rizk & Andrea Mawass", maxGuests: 4, lang:"en" },
  { slug: "kayssar-rita-addam", name: "Kayssar & Rita Addam", maxGuests: 2, lang:"ar" },
@@ -215,17 +222,17 @@ export const guests: GuestEntry[] = [
  { slug: "asaad-georgette-azar", name: "Asaad & Georgette Azar", maxGuests: 3, lang:"ar" },
  { slug: "mario-abla-azar", name: "Mario Azar & Abla Hanna", maxGuests: 2, lang:"ar" },
  { slug: "monif-eliane-azar", name: "Monif & Eliane Azar", maxGuests: 3, lang:"ar" },
- { slug: "donara-andourian", name: "Donara Andourian", maxGuests: 2, lang:"en" },
+ { slug: "donara-andourian", name: "Donara Andourian", maxGuests: 2, title: "Ms", lang:"en" },
  { slug: "georges-vanessa-kassis", name: "Georges & Vanessa Kassis", maxGuests: 2, lang:"en" },
  { slug: "fady-jessica-gemayel", name: "Fady & Jessica Gemayel", maxGuests: 2, lang:"en" },
- { slug: "serena-khairallah", name: "Serena Khayrallah", maxGuests: 2, lang:"en" },
+ { slug: "serena-khairallah", name: "Serena Khayrallah", maxGuests: 2, title: "Ms", lang:"en" },
  { slug: "elie-melissa-chihane", name: "Elie & Melissa Chihane", maxGuests: 2, lang:"en" },
  { slug: "charbel-rita-tohme", name: "Charbel & Rita Thome", maxGuests: 2, lang:"en" },
  { slug: "wissam-haddad", name: "Wissam Haddad", maxGuests: 2, lang:"en" },
  { slug: "nadim-tawk", name: "Nadim Tawk", maxGuests: 2, lang:"en" },
  { slug: "jack-boulos", name: "Jack Boulos", maxGuests: 1, lang:"en" },
  { slug: "mazen-joy-ghazal", name: "Mazen & Joy Ghazal", maxGuests: 2, lang:"en" },
- { slug: "elika-chalhoub", name: "Elika Chalhoub", maxGuests: 1, lang:"en" },
+ { slug: "elika-chalhoub", name: "Elika Chalhoub", maxGuests: 1, title: "Ms", lang:"en" },
  { slug: "elie-grace-attalah", name: "Elie & Grace Attalah", maxGuests: 2, lang:"en" },
  { slug: "elie-sandy-ghanem", name: "Elie & Sandy Ghanem", maxGuests: 2, lang:"en" },
  { slug: "nicolas-rouba-attieh", name: "Nicolas Attieh & Rouba Rhayem", maxGuests: 2, lang:"en" },
@@ -238,14 +245,14 @@ export const guests: GuestEntry[] = [
  { slug: "carole-fares", name: "Carole Fares", maxGuests: 1, lang:"en" },
  { slug: "georges-micha-fares", name: "Georges & Micha Fares", maxGuests: 2, lang:"en" },
  { slug: "kamal-chhimi", name: "Kamal Chhimi", maxGuests: 1, lang:"en" },
- { slug: "rayan-rayeh", name: "Rayan Rayeh", maxGuests: 1, title:"Mrs", lang:"en" },
- { slug: "hayat-borji", name: "Hayat Borji", maxGuests: 1, title:"Mrs", lang:"en" },
+ { slug: "rayan-rayeh", name: "Rayan Rayeh", maxGuests: 1, title:"Ms", lang:"en" },
+ { slug: "hayat-borji", name: "Hayat Borji", maxGuests: 1, title:"Ms", lang:"en" },
  { slug: "silvana-chahine", name: "Silvana Chahine", maxGuests: 1, title:"Mrs", lang:"en" },
  { slug: "yaacoub-amale-ferik", name: "Yaacoub & Amale Ferik", maxGuests: 2, lang: "ar" },
  { slug: "wissam-ramona-dibra", name: "Wissam & Ramona Dibra", maxGuests: 2, lang: "en" },
  { slug: "nicolas-amoula-abboud", name: "Nicolas & Amoula Abboud", maxGuests: 2, lang: "ar" },
  { slug: "nicolas-abboud", name: "Nicolas Abboud", maxGuests: 2, lang: "ar" },
- { slug: "rania-ferik", name: "Rania Ferik", maxGuests: 1, lang: "en" },
+ { slug: "rania-ferik", name: "Rania Ferik", maxGuests: 1, title: "Ms", lang: "en" },
  { slug: "elias-ferik", name: "Elias Ferik", maxGuests: 1, lang: "en" },
 
 

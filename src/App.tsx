@@ -37,7 +37,7 @@ function Wedding({ guest, slug }: { guest: GuestEntry | null; slug?: string }) {
   const playerRef        = useRef<any>(null);
   const sectionRefs      = useRef<(HTMLDivElement | null)[]>([]);
   const snapContainerRef = useRef<HTMLDivElement>(null);
-  const { setLang } = useLang();
+  const { lang, setLang } = useLang();
 
   const scrollTo = (i: number) => {
     sectionRefs.current[i]?.scrollIntoView({ behavior: "smooth" });
@@ -132,7 +132,7 @@ function Wedding({ guest, slug }: { guest: GuestEntry | null; slug?: string }) {
     <EventScreen     onContinue={() => scrollTo(5)} event={weddingEvents[2]} />,
     <GiftRegistryScreen onContinue={() => scrollTo(6)} />,
     <RSVPScreen      onContinue={() => {}}
-                     guestName={guest ? formatGuestName(guest) : undefined}
+                     guestName={guest ? formatGuestName(guest, lang) : undefined}
                      maxGuests={guest?.maxGuests}
                      slug={slug} />,
   ];

@@ -81,6 +81,7 @@ export type GuestEntry = {
   name: string;              // pre-filled in the RSVP form
   maxGuests: number;         // max attendies guests this person may bring
   title?: "Mr" | "Mrs" | "Ms"; // honorific shown before the name
+  nameAr?: string;           // full name in Arabic; shown as-is when page is in Arabic mode
   withFamily?: boolean;      // append "& his/her family"
   lang?: "en" | "ar";        // default language shown when this guest opens their link
 };
@@ -115,7 +116,10 @@ function inferTitle(name: string): "Mr" | "Mrs" | "Ms" | undefined {
  * "Mr. Elie and Mrs. Nawal Chammas"; entries bringing more than two
  * guests are suffixed with "and Family".
  */
-export function formatGuestName(g: GuestEntry): string {
+export function formatGuestName(g: GuestEntry, lang: "en" | "ar" = "en"): string {
+  // Arabic mode: use the hand-written Arabic name verbatim when provided.
+  if (lang === "ar" && g.nameAr) return g.nameAr;
+
   const hasFamily = g.withFamily ?? g.maxGuests > 2;
   const family = hasFamily ? " and Family" : "";
 
@@ -136,7 +140,7 @@ export function formatGuestName(g: GuestEntry): string {
 
 export const guests: GuestEntry[] = [
   // Unlimited Attendies guests
-  { slug: "charles-antoinette-nasrany", name: "Charles & Antoinette Nasrany", maxGuests: 2, lang: "ar" },
+  { slug: "charles-antoinette-nasrany", name: "Charles & Antoinette Nasrany", maxGuests: 2, lang: "ar", nameAr: "شارل وأنطوانيت نصراني" },
   { slug: "jacques-nasrany", name: "Jacques Nasrany", maxGuests: 1, lang:"en" },
   { slug: "charbel-nasrany", name: "Charbel Nasrany", maxGuests: 2, lang:"en" },
   { slug: "nicolas-christelle-anaissy", name: "Nicolas & Christelle Anaissy", maxGuests: 4, lang: "en" },
@@ -202,7 +206,7 @@ export const guests: GuestEntry[] = [
 
 
 
- { slug: "georges-joulia-mawass", name: "Georges & Joulia Mawass", maxGuests: 3, lang:"ar" },
+ { slug: "georges-joulia-mawass", name: "Georges & Joulia Mawass", maxGuests: 3, lang:"ar", nameAr: "جورج وجوليا المواس" },
  { slug: "salim-mawass", name: "Salim Mawass", maxGuests: 2, lang: "en" },
  { slug: "charbel-remy-ferik", name: "Charbel & Remy Ferik", maxGuests: 2, lang:"en" },
  { slug: "rizk-andrea-mawass", name: "Rizk & Andrea Mawass", maxGuests: 4, lang:"en" },

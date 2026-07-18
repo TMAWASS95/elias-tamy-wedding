@@ -52,6 +52,11 @@ export default function RSVPScreen({ onContinue, guestName, maxGuests, slug }: R
   const [error, setError]       = useState<string | null>(null);
   const { t } = useLang();
 
+  // Keep the pre-filled name in sync with the active language (Arabic override).
+  useEffect(() => {
+    if (guestName) setName(guestName);
+  }, [guestName]);
+
   useEffect(() => {
     if (!slug || !db) return;
     let cancelled = false;

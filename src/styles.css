@@ -1621,7 +1621,7 @@ html[dir="rtl"] .hero-date {
 
 .rsvp-contact-label {
   font-family: "Montserrat", sans-serif;
-  font-size: 8px;
+  font-size: 9px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: rgba(212, 175, 55, 0.95);
@@ -2262,7 +2262,7 @@ html[dir="rtl"] .lum-family-name,
 html[dir="rtl"] .lum-ampersand,
 html[dir="rtl"] .lum-body,
 html[dir="rtl"] .rsvp-thanks,
-html[dir="rtl"] .rsvp-name-display,
+/* html[dir="rtl"] .rsvp-name-display, */
 html[dir="rtl"] .rsvp-max-note {
   font-family: "Amiri", serif;
 }
@@ -2273,20 +2273,19 @@ html[dir="rtl"] .lum-section-title,
 html[dir="rtl"] .hero-date,
 html[dir="rtl"] .cd-label,
 html[dir="rtl"] .cd-number,
-html[dir="rtl"] .rsvp-field-label,
-html[dir="rtl"] .rsvp-deadline-label,
-html[dir="rtl"] .rsvp-deadline-date,
-html[dir="rtl"] .evt-row-label,
-html[dir="rtl"] .evt-row-name,
-html[dir="rtl"] .evt-row-sub,
-html[dir="rtl"] .evt-directions,
-html[dir="rtl"] .gift-row-label,
-html[dir="rtl"] .gift-row-value,
+/* html[dir="rtl"] .rsvp-field-label, */
+/* html[dir="rtl"] .rsvp-deadline-label, */
+/* html[dir="rtl"] .rsvp-deadline-date, */
+/* html[dir="rtl"] .evt-row-name, */
+/* html[dir="rtl"] .evt-row-sub, */
+/* html[dir="rtl"] .evt-directions, */
+/* html[dir="rtl"] .gift-row-label, */
+/* html[dir="rtl"] .gift-row-value, */
 html[dir="rtl"] .gift-copy-btn,
 html[dir="rtl"] .rsvp-pill,
 html[dir="rtl"] .rsvp-submit-btn,
-html[dir="rtl"] .rsvp-contact-note,
-html[dir="rtl"] .rsvp-contact-label,
+/* html[dir="rtl"] .rsvp-contact-note, */
+/* html[dir="rtl"] .rsvp-contact-label, */
 html[dir="rtl"] .rsvp-input,
 html[dir="rtl"] .lang-toggle {
   font-family: "Cormorant Garamond", serif;

@@ -76,8 +76,8 @@ const ar: Dict = {
   "cover.quote": "«فَلَيْسَا بَعْدُ اثْنَيْنِ\nبَلْ جَسَدٌ وَاحِدٌ»",
   "cover.quoteRef": "— متّى ١٩:٦",
   "cover.intro1": "بكل فرحٍ وسرور تتشرّف",
-  "cover.family1": "عائلة شارل نصراني",
-  "cover.family2": "عائلة جورج المواس",
+  "cover.family1": "شارل وأنطوانيت نصراني",
+  "cover.family2": "جورج وجوليا المواس",
   "cover.intro2": "بدعوتكم لحضور حفل زفاف",
 
   // Couple names (localized display)
@@ -155,20 +155,20 @@ const arEvents: Record<string, ArEvent> = {
     description:
       "سيستقبل العريس والعروس ضيوفهما كلٌّ في مكانه قبل القداس — يسعدنا انضمامكم إلينا باكراً.",
     parties: [
-      { label: "بيت العريس", name: "قرية أليسع", sub: "ذا ڤيلا", time: "من الساعة ٤:٣٠ مساءً" },
-      { label: "بيت العروس", name: "قرية أليسع", sub: "ذا آيدل لاونج", time: "من الساعة ٤:٣٠ مساءً" },
+      { label: "بيت العريس", name: "Alyasa village", sub: "The Villa", time: "من الساعة ٤:٣٠ مساءً" },
+      { label: "بيت العروس", name: "Alyasa village", sub: "The Idle Lounge", time: "من الساعة ٤:٣٠ مساءً" },
     ],
   },
   ceremony: {
     title: "الإكليل",
-    name: "قرية أليسع",
+    name: "Alyasa Village",
     sub: "كنيسة مار أليشاع",
     time: "٦:٣٠ مساءً",
   },
   dinner: {
     title: "حفل العشاء",
-    name: "قرية أليسع",
-    sub: "صالة أركاديا ",
+    name: "Alyasa Village",
+    sub: "The Arcadia Venue ",
     time: "٨:٣٠ مساءً",
   },
 };

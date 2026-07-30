@@ -90,7 +90,8 @@ export type GuestEntry = {
 // Override per guest with the `title` field if any of these is wrong.
 const MALE_FIRST_NAMES = new Set([
   "georges", "elias", "elie", "charbel", "kamal", "thomas", "gilbert", "paul",
-  "ali", "roudy", "jad", "alain", "nadim", "karl", "wissam", "jack", "jacques", "mahmoud", "roger", "roland", "salim"
+  "ali", "roudy", "jad", "alain", "nadim", "karl", "wissam", "jack", "jacques", "mahmoud", "roger",
+   "roland", "salim", "wissam"
 ]);
 const FEMALE_FIRST_NAMES = new Set([
   "christine", "samira", "rita", "marie", "donara", "serena",
@@ -100,7 +101,7 @@ const FEMALE_FIRST_NAMES = new Set([
 // where the honorific comes from name inference rather than the `title` field.
 const MS_FIRST_NAMES = new Set([
   "pamela", "abla", "rouba", "rebecca", "perla", "maria",
-  "sirine", "maha", "louloua", "catherine", "reem"
+  "sirine", "maha", "louloua", "catherine", "reem","mirna"
 ]);
 
 function inferTitle(name: string): "Mr" | "Mrs" | "Ms" | undefined {
@@ -200,6 +201,11 @@ export const guests: GuestEntry[] = [
   { slug: "bassam-liliane-matar", name: "Bassam & Liliane Matar", maxGuests: 2, lang:"ar" },
   { slug: "afif-jamale-bou-saad", name: "Afif & Jamale Bou Saad", maxGuests: 2, lang:"ar" },
   { slug: "georges-pauline-nasrany", name: "Georges & Pauline Nasrany", maxGuests: 2, lang:"en" },
+  { slug: "wissam-nasrany", name: "Wissam nasrany", maxGuests: 1, lang:"en" },
+  { slug: "mirna-nasrany", name: "Mirna nasrany", maxGuests: 1, lang:"en" },
+  { slug: "dany-sabine-bou-saad", name: "Dany & Sabine Bou Saad", maxGuests: 2, lang:"en" },
+  { slug: "charbel-manale-bou-saad", name: "Charbel & Manale Bou Saad", maxGuests: 2, lang:"en" },
+
 
  
 

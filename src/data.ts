@@ -205,6 +205,7 @@ export const guests: GuestEntry[] = [
   { slug: "mirna-nasrany", name: "Mirna nasrany", maxGuests: 1, lang:"en" },
   { slug: "dany-sabine-bou-saad", name: "Dany & Sabine Bou Saad", maxGuests: 2, lang:"en" },
   { slug: "charbel-manale-bou-saad", name: "Charbel & Manale Bou Saad", maxGuests: 2, lang:"en" },
+  { slug: "charbel-al-kadi", name: "Charbel Al Kadi", maxGuests: 2, lang:"en" },
 
 
  
